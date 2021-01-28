@@ -1,0 +1,717 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		"Swag::SwagPackageTests::ProductTarget" /* SwagPackageTests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = OBJ_80 /* Build configuration list for PBXAggregateTarget "SwagPackageTests" */;
+			buildPhases = (
+			);
+			dependencies = (
+				OBJ_83 /* PBXTargetDependency */,
+			);
+			name = SwagPackageTests;
+			productName = SwagPackageTests;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		95B958A825C2ED09009A6131 /* Dumper.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Dumper.swift */; };
+		OBJ_47 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* main.swift */; };
+		OBJ_49 /* SwagCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Swag::SwagCore::Product" /* SwagCore.framework */; };
+		OBJ_56 /* Instruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* Instruction.swift */; };
+		OBJ_57 /* Module.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* Module.swift */; };
+		OBJ_58 /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* Opcode.swift */; };
+		OBJ_59 /* Reader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* Reader.swift */; };
+		OBJ_60 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* Types.swift */; };
+		OBJ_61 /* ControlFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* ControlFrame.swift */; };
+		OBJ_62 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* Global.swift */; };
+		OBJ_63 /* ControlInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* ControlInstructions.swift */; };
+		OBJ_64 /* Instructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* Instructions.swift */; };
+		OBJ_65 /* MemoryInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* MemoryInstructions.swift */; };
+		OBJ_66 /* NumericInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* NumericInstructions.swift */; };
+		OBJ_67 /* ParametricInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* ParametricInstructions.swift */; };
+		OBJ_68 /* VariableInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* VariableInstructions.swift */; };
+		OBJ_69 /* Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* Memory.swift */; };
+		OBJ_70 /* OperandStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* OperandStack.swift */; };
+		OBJ_71 /* VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* VM.swift */; };
+		OBJ_78 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_89 /* SwagCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* SwagCoreTests.swift */; };
+		OBJ_90 /* SwagTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* SwagTests.swift */; };
+		OBJ_91 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* XCTestManifests.swift */; };
+		OBJ_93 /* SwagCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Swag::SwagCore::Product" /* SwagCore.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		95B9589525C2EBE8009A6131 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Swag::SwagCore";
+			remoteInfo = SwagCore;
+		};
+		95B9589625C2EBE8009A6131 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Swag::Swag";
+			remoteInfo = Swag;
+		};
+		95B9589725C2EBE8009A6131 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Swag::SwagCore";
+			remoteInfo = SwagCore;
+		};
+		95B9589B25C2EBE9009A6131 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Swag::SwagTests";
+			remoteInfo = SwagTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		OBJ_10 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		OBJ_13 /* Instruction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instruction.swift; sourceTree = "<group>"; };
+		OBJ_14 /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
+		OBJ_15 /* Opcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opcode.swift; sourceTree = "<group>"; };
+		OBJ_16 /* Reader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reader.swift; sourceTree = "<group>"; };
+		OBJ_17 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		OBJ_19 /* ControlFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlFrame.swift; sourceTree = "<group>"; };
+		OBJ_20 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
+		OBJ_22 /* ControlInstructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlInstructions.swift; sourceTree = "<group>"; };
+		OBJ_23 /* Instructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instructions.swift; sourceTree = "<group>"; };
+		OBJ_24 /* MemoryInstructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryInstructions.swift; sourceTree = "<group>"; };
+		OBJ_25 /* NumericInstructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericInstructions.swift; sourceTree = "<group>"; };
+		OBJ_26 /* ParametricInstructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametricInstructions.swift; sourceTree = "<group>"; };
+		OBJ_27 /* VariableInstructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableInstructions.swift; sourceTree = "<group>"; };
+		OBJ_28 /* Memory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memory.swift; sourceTree = "<group>"; };
+		OBJ_29 /* OperandStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperandStack.swift; sourceTree = "<group>"; };
+		OBJ_30 /* VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VM.swift; sourceTree = "<group>"; };
+		OBJ_33 /* SwagCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwagCoreTests.swift; sourceTree = "<group>"; };
+		OBJ_34 /* SwagTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwagTests.swift; sourceTree = "<group>"; };
+		OBJ_35 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
+		OBJ_40 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		OBJ_9 /* Dumper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dumper.swift; sourceTree = "<group>"; };
+		"Swag::Swag::Product" /* Swag */ = {isa = PBXFileReference; lastKnownFileType = text; path = Swag; sourceTree = BUILT_PRODUCTS_DIR; };
+		"Swag::SwagCore::Product" /* SwagCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SwagCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"Swag::SwagTests::Product" /* SwagTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = SwagTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		OBJ_48 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_49 /* SwagCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_72 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_92 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_93 /* SwagCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		OBJ_11 /* SwagCore */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_12 /* Binary */,
+				OBJ_18 /* Interpreter */,
+			);
+			name = SwagCore;
+			path = Sources/SwagCore;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_12 /* Binary */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_13 /* Instruction.swift */,
+				OBJ_14 /* Module.swift */,
+				OBJ_15 /* Opcode.swift */,
+				OBJ_16 /* Reader.swift */,
+				OBJ_17 /* Types.swift */,
+				OBJ_9 /* Dumper.swift */,
+			);
+			path = Binary;
+			sourceTree = "<group>";
+		};
+		OBJ_18 /* Interpreter */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_19 /* ControlFrame.swift */,
+				OBJ_20 /* Global.swift */,
+				OBJ_21 /* Instructions */,
+				OBJ_28 /* Memory.swift */,
+				OBJ_29 /* OperandStack.swift */,
+				OBJ_30 /* VM.swift */,
+			);
+			path = Interpreter;
+			sourceTree = "<group>";
+		};
+		OBJ_21 /* Instructions */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_22 /* ControlInstructions.swift */,
+				OBJ_23 /* Instructions.swift */,
+				OBJ_24 /* MemoryInstructions.swift */,
+				OBJ_25 /* NumericInstructions.swift */,
+				OBJ_26 /* ParametricInstructions.swift */,
+				OBJ_27 /* VariableInstructions.swift */,
+			);
+			path = Instructions;
+			sourceTree = "<group>";
+		};
+		OBJ_31 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_32 /* SwagTests */,
+			);
+			name = Tests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_32 /* SwagTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_33 /* SwagCoreTests.swift */,
+				OBJ_34 /* SwagTests.swift */,
+				OBJ_35 /* XCTestManifests.swift */,
+			);
+			name = SwagTests;
+			path = Tests/SwagTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_36 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				"Swag::Swag::Product" /* Swag */,
+				"Swag::SwagTests::Product" /* SwagTests.xctest */,
+				"Swag::SwagCore::Product" /* SwagCore.framework */,
+			);
+			name = Products;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		OBJ_5 /*  */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_6 /* Package.swift */,
+				OBJ_7 /* Sources */,
+				OBJ_31 /* Tests */,
+				OBJ_36 /* Products */,
+				OBJ_40 /* README.md */,
+			);
+			name = "";
+			sourceTree = "<group>";
+		};
+		OBJ_7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_8 /* Swag */,
+				OBJ_11 /* SwagCore */,
+			);
+			name = Sources;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_8 /* Swag */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_10 /* main.swift */,
+			);
+			name = Swag;
+			path = Sources/Swag;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		"Swag::Swag" /* Swag */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_42 /* Build configuration list for PBXNativeTarget "Swag" */;
+			buildPhases = (
+				OBJ_45 /* Sources */,
+				OBJ_48 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_50 /* PBXTargetDependency */,
+			);
+			name = Swag;
+			productName = Swag;
+			productReference = "Swag::Swag::Product" /* Swag */;
+			productType = "com.apple.product-type.tool";
+		};
+		"Swag::SwagCore" /* SwagCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_52 /* Build configuration list for PBXNativeTarget "SwagCore" */;
+			buildPhases = (
+				OBJ_55 /* Sources */,
+				OBJ_72 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwagCore;
+			productName = SwagCore;
+			productReference = "Swag::SwagCore::Product" /* SwagCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		"Swag::SwagTests" /* SwagTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_85 /* Build configuration list for PBXNativeTarget "SwagTests" */;
+			buildPhases = (
+				OBJ_88 /* Sources */,
+				OBJ_92 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_94 /* PBXTargetDependency */,
+				OBJ_95 /* PBXTargetDependency */,
+			);
+			name = SwagTests;
+			productName = SwagTests;
+			productReference = "Swag::SwagTests::Product" /* SwagTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		"Swag::SwiftPMPackageDescription" /* SwagPackageDescription */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_74 /* Build configuration list for PBXNativeTarget "SwagPackageDescription" */;
+			buildPhases = (
+				OBJ_77 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwagPackageDescription;
+			productName = SwagPackageDescription;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		OBJ_1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 9999;
+				LastUpgradeCheck = 9999;
+			};
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "Swag" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_36 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				"Swag::Swag" /* Swag */,
+				"Swag::SwagCore" /* SwagCore */,
+				"Swag::SwiftPMPackageDescription" /* SwagPackageDescription */,
+				"Swag::SwagPackageTests::ProductTarget" /* SwagPackageTests */,
+				"Swag::SwagTests" /* SwagTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		OBJ_45 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_47 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_55 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_56 /* Instruction.swift in Sources */,
+				OBJ_57 /* Module.swift in Sources */,
+				OBJ_58 /* Opcode.swift in Sources */,
+				OBJ_59 /* Reader.swift in Sources */,
+				OBJ_60 /* Types.swift in Sources */,
+				OBJ_61 /* ControlFrame.swift in Sources */,
+				OBJ_62 /* Global.swift in Sources */,
+				OBJ_63 /* ControlInstructions.swift in Sources */,
+				OBJ_64 /* Instructions.swift in Sources */,
+				OBJ_65 /* MemoryInstructions.swift in Sources */,
+				OBJ_66 /* NumericInstructions.swift in Sources */,
+				OBJ_67 /* ParametricInstructions.swift in Sources */,
+				OBJ_68 /* VariableInstructions.swift in Sources */,
+				OBJ_69 /* Memory.swift in Sources */,
+				95B958A825C2ED09009A6131 /* Dumper.swift in Sources */,
+				OBJ_70 /* OperandStack.swift in Sources */,
+				OBJ_71 /* VM.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_78 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_89 /* SwagCoreTests.swift in Sources */,
+				OBJ_90 /* SwagTests.swift in Sources */,
+				OBJ_91 /* XCTestManifests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		OBJ_50 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Swag::SwagCore" /* SwagCore */;
+			targetProxy = 95B9589525C2EBE8009A6131 /* PBXContainerItemProxy */;
+		};
+		OBJ_83 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Swag::SwagTests" /* SwagTests */;
+			targetProxy = 95B9589B25C2EBE9009A6131 /* PBXContainerItemProxy */;
+		};
+		OBJ_94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Swag::Swag" /* Swag */;
+			targetProxy = 95B9589625C2EBE8009A6131 /* PBXContainerItemProxy */;
+		};
+		OBJ_95 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "Swag::SwagCore" /* SwagCore */;
+			targetProxy = 95B9589725C2EBE8009A6131 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		OBJ_3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"SWIFT_PACKAGE=1",
+					"DEBUG=1",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		OBJ_4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"SWIFT_PACKAGE=1",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+		OBJ_43 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Swag.xcodeproj/Swag_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
+				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = Swag;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		OBJ_44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Swag.xcodeproj/Swag_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
+				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = Swag;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		OBJ_53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Swag.xcodeproj/SwagCore_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwagCore;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SwagCore;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		OBJ_54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Swag.xcodeproj/SwagCore_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = SwagCore;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SwagCore;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		OBJ_75 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -package-description-version 5.3.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		OBJ_76 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -package-description-version 5.3.0";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		OBJ_81 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		OBJ_82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		OBJ_86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Swag.xcodeproj/SwagTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SwagTests;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		OBJ_87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Swag.xcodeproj/SwagTests_Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGET_NAME = SwagTests;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		OBJ_2 /* Build configuration list for PBXProject "Swag" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_3 /* Debug */,
+				OBJ_4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_42 /* Build configuration list for PBXNativeTarget "Swag" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_43 /* Debug */,
+				OBJ_44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_52 /* Build configuration list for PBXNativeTarget "SwagCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_53 /* Debug */,
+				OBJ_54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_74 /* Build configuration list for PBXNativeTarget "SwagPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_75 /* Debug */,
+				OBJ_76 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_80 /* Build configuration list for PBXAggregateTarget "SwagPackageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_81 /* Debug */,
+				OBJ_82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_85 /* Build configuration list for PBXNativeTarget "SwagTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_86 /* Debug */,
+				OBJ_87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = OBJ_1 /* Project object */;
+}

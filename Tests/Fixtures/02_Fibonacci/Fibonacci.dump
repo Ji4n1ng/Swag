@@ -1,0 +1,95 @@
+ch07_fib.wasm:	file format wasm 0x1
+
+Section Details:
+
+Type[3]:
+ - type[0] (i32, i32) -> nil
+ - type[1] () -> nil
+ - type[2] (i32) -> i32
+Import[1]:
+ - func[0] sig=0 <env.assert_eq_i32> <- env.assert_eq_i32
+Function[2]:
+ - func[1] sig=1 <main>
+ - func[2] sig=2
+Export[1]:
+ - func[1] <main> -> "main"
+Start:
+ - start function: 1
+Code[2]:
+ - func[1] size=91 <main>
+ - func[2] size=42
+
+Code Disassembly:
+
+000046 func[1] <main>:
+ 000047: 41 00                      | i32.const 0
+ 000049: 10 02                      | call 2
+ 00004b: 41 00                      | i32.const 0
+ 00004d: 10 00                      | call 0 <env.assert_eq_i32>
+ 00004f: 41 01                      | i32.const 1
+ 000051: 10 02                      | call 2
+ 000053: 41 01                      | i32.const 1
+ 000055: 10 00                      | call 0 <env.assert_eq_i32>
+ 000057: 41 02                      | i32.const 2
+ 000059: 10 02                      | call 2
+ 00005b: 41 01                      | i32.const 1
+ 00005d: 10 00                      | call 0 <env.assert_eq_i32>
+ 00005f: 41 03                      | i32.const 3
+ 000061: 10 02                      | call 2
+ 000063: 41 02                      | i32.const 2
+ 000065: 10 00                      | call 0 <env.assert_eq_i32>
+ 000067: 41 04                      | i32.const 4
+ 000069: 10 02                      | call 2
+ 00006b: 41 03                      | i32.const 3
+ 00006d: 10 00                      | call 0 <env.assert_eq_i32>
+ 00006f: 41 05                      | i32.const 5
+ 000071: 10 02                      | call 2
+ 000073: 41 05                      | i32.const 5
+ 000075: 10 00                      | call 0 <env.assert_eq_i32>
+ 000077: 41 06                      | i32.const 6
+ 000079: 10 02                      | call 2
+ 00007b: 41 08                      | i32.const 8
+ 00007d: 10 00                      | call 0 <env.assert_eq_i32>
+ 00007f: 41 07                      | i32.const 7
+ 000081: 10 02                      | call 2
+ 000083: 41 0d                      | i32.const 13
+ 000085: 10 00                      | call 0 <env.assert_eq_i32>
+ 000087: 41 08                      | i32.const 8
+ 000089: 10 02                      | call 2
+ 00008b: 41 15                      | i32.const 21
+ 00008d: 10 00                      | call 0 <env.assert_eq_i32>
+ 00008f: 41 09                      | i32.const 9
+ 000091: 10 02                      | call 2
+ 000093: 41 22                      | i32.const 34
+ 000095: 10 00                      | call 0 <env.assert_eq_i32>
+ 000097: 41 11                      | i32.const 17
+ 000099: 10 02                      | call 2
+ 00009b: 41 bd 0c                   | i32.const 1597
+ 00009e: 10 00                      | call 0 <env.assert_eq_i32>
+ 0000a0: 0b                         | end
+0000a2 func[2]:
+ 0000a3: 41 00                      | i32.const 0
+ 0000a5: 20 00                      | local.get 0
+ 0000a7: 45                         | i32.eqz
+ 0000a8: 0d 00                      | br_if 0
+ 0000aa: 1a                         | drop
+ 0000ab: 41 01                      | i32.const 1
+ 0000ad: 20 00                      | local.get 0
+ 0000af: 41 01                      | i32.const 1
+ 0000b1: 46                         | i32.eq
+ 0000b2: 0d 00                      | br_if 0
+ 0000b4: 20 00                      | local.get 0
+ 0000b6: 41 02                      | i32.const 2
+ 0000b8: 46                         | i32.eq
+ 0000b9: 0d 00                      | br_if 0
+ 0000bb: 1a                         | drop
+ 0000bc: 20 00                      | local.get 0
+ 0000be: 41 01                      | i32.const 1
+ 0000c0: 6b                         | i32.sub
+ 0000c1: 10 02                      | call 2
+ 0000c3: 20 00                      | local.get 0
+ 0000c5: 41 02                      | i32.const 2
+ 0000c7: 6b                         | i32.sub
+ 0000c8: 10 02                      | call 2
+ 0000ca: 6a                         | i32.add
+ 0000cb: 0b                         | end

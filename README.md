@@ -2,7 +2,7 @@
 
 A toy wasm interpreter written in Swift.
 
-## Wait... but why ❔
+## Wait... but why 🤔
 
 Since the community has many wasm implementations, both inside and outside the browser, why write another one? Emmmmm... just want to learn wasm.
 
@@ -24,7 +24,7 @@ Since the community has many wasm implementations, both inside and outside the b
         - [x] Memory Instructions
         - [x] Variable Instructions
         - [ ] Control Instructions
-    - [ ] Errors
+    - [ ] Error handling
 - **Validator**
     - [ ] Module validator
     - [ ] Code validator
