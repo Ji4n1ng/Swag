@@ -147,11 +147,11 @@
 		OBJ_12 /* Binary */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_13 /* Instruction.swift */,
+				OBJ_17 /* Types.swift */,
 				OBJ_14 /* Module.swift */,
+				OBJ_13 /* Instruction.swift */,
 				OBJ_15 /* Opcode.swift */,
 				OBJ_16 /* Reader.swift */,
-				OBJ_17 /* Types.swift */,
 				OBJ_9 /* Dumper.swift */,
 			);
 			path = Binary;
@@ -160,12 +160,12 @@
 		OBJ_18 /* Interpreter */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_19 /* ControlFrame.swift */,
+				OBJ_30 /* VM.swift */,
 				OBJ_20 /* Global.swift */,
-				OBJ_21 /* Instructions */,
 				OBJ_28 /* Memory.swift */,
 				OBJ_29 /* OperandStack.swift */,
-				OBJ_30 /* VM.swift */,
+				OBJ_19 /* ControlFrame.swift */,
+				OBJ_21 /* Instructions */,
 			);
 			path = Interpreter;
 			sourceTree = "<group>";

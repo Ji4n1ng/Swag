@@ -14,7 +14,7 @@
             }
           }
       }};
-      fetch('ch01_hw.wasm').then(response =>
+      fetch('HelloWorld.wasm').then(response =>
           response.arrayBuffer()
       ).then(buffer =>
           WebAssembly.instantiate(buffer, importObj)
