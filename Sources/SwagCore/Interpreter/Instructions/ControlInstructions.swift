@@ -11,6 +11,70 @@ extension VM {
     
     // MARK: - Control Instructions
     
+    func unreachable() {
+        fatalError("unreachable")
+    }
+    
+    func nop() {
+        // do nothing
+    }
+    
+    mutating func block(_ args: BlockArgs) {
+        let bt = module.getBlockType(bt: args.blockType)
+        enterBlock(opcode: .block, blockType: bt, instrs: args.instrutions)
+    }
+    
+    mutating func loop(_ args: BlockArgs) {
+        let bt = module.getBlockType(bt: args.blockType)
+        enterBlock(opcode: .loop, blockType: bt, instrs: args.instrutions)
+    }
+    
+    mutating func `if`(_ args: IfArgs) {
+        let bt = module.getBlockType(bt: args.blockType)
+        let bool = operandStack.popBool()
+        if bool {
+            enterBlock(opcode: .if, blockType: bt, instrs: args.instrutions1)
+        } else {
+            let instrs = args.instrutions2 ?? [Instruction]()
+            enterBlock(opcode: .if, blockType: bt, instrs: instrs)
+        }
+    }
+    
+    mutating func br(_ arg: LabelIdx) {
+        let labelIdx = Int(arg)
+        for _ in 0..<labelIdx {
+            controlStack.popControlFrame()
+        }
+        if var cf = controlStack.topControlFrame,
+           cf.opcode == .loop {
+            resetBlock(cf)
+            cf.pc = 0
+            controlStack.topControlFrame = cf
+        } else {
+            exitBlock()
+        }
+    }
+    
+    mutating func brIf(_ arg: LabelIdx) {
+        if operandStack.popBool() {
+            br(arg)
+        }
+    }
+    
+    mutating func brTable(_ arg: BrTableArgs) {
+        let n = Int(operandStack.popU32())
+        if n < arg.labels.count {
+            br(arg.labels[n])
+        } else {
+            br(arg.default)
+        }
+    }
+    
+    mutating func `return`() {
+        let (_, labelIdx) = controlStack.topCallFrame()
+        br(LabelIdx(labelIdx))
+    }
+    
     mutating func call(funcIdx: FuncIdx) {
         let importedFuncCount = module.importSec?.count ?? 0
         if funcIdx < importedFuncCount {
@@ -77,9 +141,4 @@ operand stack:
         }
     }
     
-    mutating func brIf() {
-        if operandStack.popBool() {
-            exitBlock()
-        }
-    }
 }

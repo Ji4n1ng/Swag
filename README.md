@@ -31,6 +31,7 @@ Since the community has many wasm implementations, both inside and outside the b
 - **Tests**
     - [x] Hello World
     - [x] Fibonacci
+    - [x] Factorial
 
 
 ## Reference project ❤️

@@ -76,7 +76,7 @@ extension OperandStack {
     mutating func pushU64s(_ vals: [UInt64]) {
         slots.append(contentsOf: vals)
     }
-    mutating func popU64s(_ n: Int) -> [UInt64] {
+    @discardableResult mutating func popU64s(_ n: Int) -> [UInt64] {
         let vals = Array(slots.suffix(n))
         slots.removeLast(n)
         return vals

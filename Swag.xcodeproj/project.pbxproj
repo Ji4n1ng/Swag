@@ -173,8 +173,8 @@
 		OBJ_21 /* Instructions */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_22 /* ControlInstructions.swift */,
 				OBJ_23 /* Instructions.swift */,
+				OBJ_22 /* ControlInstructions.swift */,
 				OBJ_24 /* MemoryInstructions.swift */,
 				OBJ_25 /* NumericInstructions.swift */,
 				OBJ_26 /* ParametricInstructions.swift */,
@@ -212,7 +212,7 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -221,7 +221,6 @@
 				OBJ_36 /* Products */,
 				OBJ_40 /* README.md */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -326,7 +325,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_36 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

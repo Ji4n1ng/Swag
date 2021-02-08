@@ -37,7 +37,7 @@ public struct Module {
 }
 
 public extension Module {
-    func getBlockType(bt: BlockType) -> FuncType? {
+    func getBlockType(bt: BlockType) -> FuncType {
         if let bbt = BaseBlockType(rawValue: bt) {
             switch bbt {
             case .i32:
@@ -53,7 +53,11 @@ public extension Module {
                 return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [])
             }
         } else {
-            return self.typeSec?[Int(bt)]
+            if let type = self.typeSec?[Int(bt)] {
+                return type
+            } else {
+                fatalError()
+            }
         }
     }
 }

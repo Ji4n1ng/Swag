@@ -48,7 +48,7 @@ extension ControlStack {
     mutating func pushControlFrame(_ controlFrame: ControlFrame) {
         frames.append(controlFrame)
     }
-    mutating func popControlFrame() -> ControlFrame {
+    @discardableResult mutating func popControlFrame() -> ControlFrame {
         frames.removeLast()
     }
 }

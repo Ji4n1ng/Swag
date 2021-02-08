@@ -95,6 +95,12 @@ extension VM {
         }
     }
     
+    mutating func resetBlock(_ controlFrame: ControlFrame) {
+        let results = operandStack.popU64s(controlFrame.blockType.paramTypes.count)
+        operandStack.popU64s(operandStack.size() - controlFrame.bp)
+        operandStack.pushU64s(results)
+    }
+    
     // MARK: loop
     
     public mutating func loop() {
@@ -118,27 +124,33 @@ extension VM {
         switch instr.opcode {
         // MARK: Control Instructions
         case .unreachable:
-            break
+            unreachable()
         case .nop:
-            break
+            nop()
         case .block:
-            break
+            let blockArgs = instr.args as! BlockArgs
+            block(blockArgs)
         case .loop:
-            break
+            let blockArgs = instr.args as! BlockArgs
+            loop(blockArgs)
         case .if:
-            break
+            let ifArgs = instr.args as! IfArgs
+            self.if(ifArgs)
         case .else:
             break
         case .end:
             break
         case .br:
-            break
+            let labelIdx = instr.args as! LabelIdx
+            br(labelIdx)
         case .brIf:
-            brIf()
+            let labelIdx = instr.args as! LabelIdx
+            brIf(labelIdx)
         case .brTable:
-            break
+            let brTableArgs = instr.args as! BrTableArgs
+            brTable(brTableArgs)
         case .return:
-            break
+            self.return()
         case .call:
             let funcIndex = instr.args as! FuncIdx
             call(funcIdx: funcIndex)
