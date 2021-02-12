@@ -167,8 +167,20 @@ operand stack:
         }
     }
     
-    mutating func callIndirect() {
+    mutating func callIndirect(_ typeIdx: TypeIdx) {
+        guard let table = self.table else { fatalError() }
+        let ft = module.typeSec![Int(typeIdx)]
         
+        let i = operandStack.popU32()
+        if i >= table.size() {
+            fatalError("undefined element")
+        }
+        let function = table.getElem(UInt32(i))
+        if function.type.signature() != ft.signature() {
+            fatalError("Type mismatch")
+        }
+        
+        callFunc(function)
     }
     
 }

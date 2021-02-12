@@ -29,9 +29,12 @@ Since the community has many wasm implementations, both inside and outside the b
     - [ ] Module validator
     - [ ] Code validator
 - **Tests**
+    - [x] Instructions
     - [x] Hello World
     - [x] Fibonacci
     - [x] Factorial
+    - [x] Memory
+    - [x] Calc
 
 
 ## Reference project ❤️

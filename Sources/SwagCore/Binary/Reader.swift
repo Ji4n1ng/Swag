@@ -595,7 +595,7 @@ extension Reader {
         BrTableArgs(labels: readIndices(), default: readVarUInt32())
     }
     
-    mutating func readCallIndirectArgs() -> UInt32 {
+    mutating func readCallIndirectArgs() -> TypeIdx {
         let typeIdx = readVarUInt32()
         readZero()
         return typeIdx

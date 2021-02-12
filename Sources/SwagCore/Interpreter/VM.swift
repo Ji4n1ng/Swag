@@ -14,6 +14,7 @@ public struct VM {
     public var memory: Memory
     public var globals: [GlobalVar]
     public var funcs: [Function]
+    public var table: Table?
     
     /// [Optional] This field records the position of the first local
     /// variable of the current function (if there is a parameter, then
@@ -43,6 +44,7 @@ public struct VM {
         initMemory()
         initGlobals()
         initFuncs()
+        initTable()
         if let startSec = module.startSec {
             call(funcIdx: startSec)
         } else {
@@ -121,6 +123,28 @@ public struct VM {
                     default:
                         fatalError("Native funcs no found")
                     }
+                }
+            }
+        }
+    }
+    
+    mutating func initTable() {
+        if let tableSec = module.tableSec,
+           tableSec.count > 0 {
+            table = Table(type: tableSec[0], elems: [])
+        }
+        if let elemSec = module.elemSec {
+            for elem in elemSec {
+                let tableType = TableType(elemType: FUNC_REF, limits: Limits(tag: .min, min: 0))
+                table = Table(type: tableType, elems: [])
+                for instr in elem.offset {
+                    execInstr(instr)
+                }
+                // TODO:
+//                let offset = operandStack.popU32()
+                for (_, funcIdx) in elem.`init`.enumerated() {
+                    let function = funcs[Int(funcIdx)]
+                    table?.elems.append(function)
                 }
             }
         }
@@ -215,7 +239,8 @@ extension VM {
             let funcIndex = instr.args as! FuncIdx
             call(funcIdx: funcIndex)
         case .callIndirect:
-            break
+            let typeIdx = instr.args as! TypeIdx
+            callIndirect(typeIdx)
         
         // MARK: Parametric Instructions
         case .drop:

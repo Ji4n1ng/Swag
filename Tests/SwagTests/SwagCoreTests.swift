@@ -85,6 +85,14 @@ final class SwagCoreTests: XCTestCase {
         instance.loop()
     }
     
+    // This is to test indirect call
+    func testCalc() throws {
+        let casePath = fixtures.appendingPathComponent("05_Calc")
+            .appendingPathComponent("Calc.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
+    }
+    
     static var allTests = [
         ("testInstructions", testInstructions),
         ("testHelloworld", testHelloworld),
