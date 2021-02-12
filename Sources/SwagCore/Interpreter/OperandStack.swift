@@ -20,10 +20,10 @@ extension OperandStack {
     }
     
     mutating func pushS64(_ val: Int64) {
-        pushU64(UInt64(val))
+        pushU64(UInt64(bitPattern: val))
     }
     mutating func popS64() -> Int64 {
-        Int64(popU64())
+        Int64(truncatingIfNeeded: popU64())
     }
     
     mutating func pushU32(_ val: UInt32) {
@@ -34,10 +34,10 @@ extension OperandStack {
     }
     
     mutating func pushS32(_ val: Int32) {
-        pushU32(UInt32(val))
+        pushU32(UInt32(bitPattern: val))
     }
     mutating func popS32() -> Int32 {
-        Int32(popU32())
+        Int32(truncatingIfNeeded: popU32())
     }
     
     mutating func pushF32(_ val: Float32) {

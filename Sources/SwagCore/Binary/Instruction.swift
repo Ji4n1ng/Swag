@@ -26,12 +26,16 @@ public struct MemArg {
 }
 
 public typealias BlockType = Int32
-/// 4 basic valtypes
-public enum BaseBlockType: BlockType {
+public enum BasicBlockType: BlockType {
+    /// ()->(i32)
     case i32 = -1
+    /// ()->(i64)
     case i64 = -2
+    /// ()->(f32)
     case f32 = -3
+    /// ()->(f64)
     case f64 = -4
+    /// ()->()
     case empty = -64
 }
 

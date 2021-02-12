@@ -44,7 +44,7 @@ extension VM {
     
     mutating func i32Load8S(memArg: MemArg) {
         let val = readU8(memArg: memArg)
-        operandStack.pushS32(Int32(Int8(val)))
+        operandStack.pushS32(Int32(Int8(truncatingIfNeeded: val)))
     }
     
     mutating func i32Load8U(memArg: MemArg) {
@@ -54,7 +54,7 @@ extension VM {
     
     mutating func i32Load16S(memArg: MemArg) {
         let val = readU16(memArg: memArg)
-        operandStack.pushS32(Int32(Int16(val)))
+        operandStack.pushS32(Int32(Int16(truncatingIfNeeded: val)))
     }
     
     mutating func i32Load16U(memArg: MemArg) {
@@ -64,7 +64,7 @@ extension VM {
     
     mutating func i64Load8S(memArg: MemArg) {
         let val = readU8(memArg: memArg)
-        operandStack.pushS64(Int64(Int8(val)))
+        operandStack.pushS64(Int64(Int8(truncatingIfNeeded: val)))
     }
     
     mutating func i64Load8U(memArg: MemArg) {
@@ -74,7 +74,7 @@ extension VM {
     
     mutating func i64Load16S(memArg: MemArg) {
         let val = readU16(memArg: memArg)
-        operandStack.pushS64(Int64(Int16(val)))
+        operandStack.pushS64(Int64(Int16(truncatingIfNeeded: val)))
     }
     
     mutating func i64Load16U(memArg: MemArg) {
@@ -84,7 +84,7 @@ extension VM {
     
     mutating func i64Load32S(memArg: MemArg) {
         let val = readU32(memArg: memArg)
-        operandStack.pushS64(Int64(Int32(val)))
+        operandStack.pushS64(Int64(Int32(truncatingIfNeeded: val)))
     }
     
     mutating func i64Load32U(memArg: MemArg) {
@@ -111,7 +111,9 @@ extension VM {
         var buf = Array<Byte?>.init(repeating: nil, count: 2)
         let offset = getOffset(memArg: memArg)
         memory.read(offset: offset, buf: &buf)
-        let result = buf.withUnsafeBufferPointer {
+        let unwrapBuf = buf.compactMap { $0 }
+        guard unwrapBuf.count == buf.count else { fatalError() }
+        let result = unwrapBuf.withUnsafeBufferPointer {
             ($0.baseAddress!.withMemoryRebound(to: UInt16.self, capacity: 1) { $0 })
         }.pointee
         return result
@@ -121,7 +123,9 @@ extension VM {
         var buf = Array<Byte?>.init(repeating: nil, count: 4)
         let offset = getOffset(memArg: memArg)
         memory.read(offset: offset, buf: &buf)
-        let result = buf.withUnsafeBufferPointer {
+        let unwrapBuf = buf.compactMap { $0 }
+        guard unwrapBuf.count == buf.count else { fatalError() }
+        let result = unwrapBuf.withUnsafeBufferPointer {
             ($0.baseAddress!.withMemoryRebound(to: UInt32.self, capacity: 1) { $0 })
         }.pointee
         return result
@@ -131,7 +135,9 @@ extension VM {
         var buf = Array<Byte?>.init(repeating: nil, count: 8)
         let offset = getOffset(memArg: memArg)
         memory.read(offset: offset, buf: &buf)
-        let result = buf.withUnsafeBufferPointer {
+        let unwrapBuf = buf.compactMap { $0 }
+        guard unwrapBuf.count == buf.count else { fatalError() }
+        let result = unwrapBuf.withUnsafeBufferPointer {
             ($0.baseAddress!.withMemoryRebound(to: UInt64.self, capacity: 1) { $0 })
         }.pointee
         return result

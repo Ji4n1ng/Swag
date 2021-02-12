@@ -13,6 +13,7 @@ public struct VM {
     public var module: Module
     public var memory: Memory
     public var globals: [GlobalVar]
+    public var funcs: [Function]
     
     /// [Optional] This field records the position of the first local
     /// variable of the current function (if there is a parameter, then
@@ -35,13 +36,24 @@ public struct VM {
             let type = MemType(tag: tag, min: 1000, max: UInt32(MAX_PAGE_COUNT))
             memory = Memory(memoryType: type)
         }
+        funcs = [Function]()
         controlStack = ControlStack(frames: [ControlFrame]())
         globals = [GlobalVar]()
         local0Index = 0
         initMemory()
         initGlobals()
-        guard let startSec = module.startSec else { fatalError() }
-        call(funcIdx: startSec)
+        initFuncs()
+        if let startSec = module.startSec {
+            call(funcIdx: startSec)
+        } else {
+            guard let exportSec = module.exportSec else { fatalError() }
+            for exp in exportSec {
+                if exp.desc.tag == .func && exp.name == "main" {
+                    call(funcIdx: exp.desc.idx)
+                    break
+                }
+            }
+        }
     }
     
     mutating func initMemory() {
@@ -65,13 +77,61 @@ public struct VM {
             globals.append(globalVal)
         }
     }
+    
+    mutating func initFuncs() {
+        linkNativeFuncs()
+        if let funcSec = module.funcSec {
+            for (i, typeIdx) in funcSec.enumerated() {
+                guard let funcType = module.typeSec?[Int(typeIdx)] else { continue }
+                guard let code = module.codeSec?[i] else { continue }
+                let function = Function(funcType, code: code)
+                funcs.append(function)
+            }
+        }
+    }
+    
+    mutating func linkNativeFuncs() {
+        if let importSec = module.importSec {
+            for imp in importSec {
+                if imp.desc.tag == .func && imp.module == "env" {
+                    guard let typeIdx = imp.desc.funcType else { continue }
+                    guard let funcType = module.typeSec?[Int(typeIdx)] else { continue }
+                    switch imp.name {
+                    case "print_char":
+                        let function = Function(funcType, swiftFunc: printChar)
+                        funcs.append(function)
+                    case "assert_true":
+                        let function = Function(funcType, swiftFunc: assertTrue)
+                        funcs.append(function)
+                    case "assert_false":
+                        let function = Function(funcType, swiftFunc: assertFalse)
+                        funcs.append(function)
+                    case "assert_eq_i32":
+                        let function = Function(funcType, swiftFunc: assertEqI32)
+                        funcs.append(function)
+                    case "assert_eq_i64":
+                        let function = Function(funcType, swiftFunc: assertEqI64)
+                        funcs.append(function)
+                    case "assert_eq_f32":
+                        let function = Function(funcType, swiftFunc: assertEqF32)
+                        funcs.append(function)
+                    case "assert_eq_f64":
+                        let function = Function(funcType, swiftFunc: assertEqF64)
+                        funcs.append(function)
+                    default:
+                        fatalError("Native funcs no found")
+                    }
+                }
+            }
+        }
+    }
 }
 
 extension VM {
-    // MARK: block stack
-    mutating func enterBlock(opcode: Opcode, blockType: FuncType, instrs: [Instruction]) {
-        let basePointer = operandStack.size() - blockType.paramTypes.count
-        let controlFrame = ControlFrame(opcode: opcode, blockType: blockType, instrs: instrs, bp: basePointer, pc: 0)
+    // MARK: - block stack
+    mutating func enterBlock(opcode: Opcode, funcType: FuncType, instrs: [Instruction]) {
+        let basePointer = operandStack.size() - funcType.paramTypes.count
+        let controlFrame = ControlFrame(opcode: opcode, blockType: funcType, instrs: instrs, bp: basePointer, pc: 0)
         controlStack.pushControlFrame(controlFrame)
         if opcode == .call {
             local0Index = UInt32(basePointer)
@@ -85,7 +145,7 @@ extension VM {
     
     mutating func clearBlock(_ controlFrame: ControlFrame) {
         let results = operandStack.popU64s(controlFrame.blockType.resultTypes.count)
-        let _ = operandStack.popU64s(operandStack.size() - controlFrame.bp)
+        operandStack.popU64s(operandStack.size() - controlFrame.bp)
         operandStack.pushU64s(results)
         if controlFrame.opcode == .call && controlStack.controlDepth() > 0 {
             let (lastCallFrame, _) = controlStack.topCallFrame()
@@ -101,7 +161,7 @@ extension VM {
         operandStack.pushU64s(results)
     }
     
-    // MARK: loop
+    // MARK: - loop
     
     public mutating func loop() {
         let depth = controlStack.controlDepth()

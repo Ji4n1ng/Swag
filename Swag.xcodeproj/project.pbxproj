@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		951641A425D23F2300D18813 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951641A325D23F2300D18813 /* Function.swift */; };
+		951641AB25D2CE2400D18813 /* Native.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951641AA25D2CE2400D18813 /* Native.swift */; };
 		95B958A825C2ED09009A6131 /* Dumper.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Dumper.swift */; };
 		OBJ_47 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* main.swift */; };
 		OBJ_49 /* SwagCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Swag::SwagCore::Product" /* SwagCore.framework */; };
@@ -79,6 +81,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		951641A325D23F2300D18813 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
+		951641AA25D2CE2400D18813 /* Native.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Native.swift; sourceTree = "<group>"; };
 		OBJ_10 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		OBJ_13 /* Instruction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instruction.swift; sourceTree = "<group>"; };
 		OBJ_14 /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
@@ -165,6 +169,8 @@
 				OBJ_28 /* Memory.swift */,
 				OBJ_29 /* OperandStack.swift */,
 				OBJ_19 /* ControlFrame.swift */,
+				951641A325D23F2300D18813 /* Function.swift */,
+				951641AA25D2CE2400D18813 /* Native.swift */,
 				OBJ_21 /* Instructions */,
 			);
 			path = Interpreter;
@@ -354,6 +360,7 @@
 			files = (
 				OBJ_56 /* Instruction.swift in Sources */,
 				OBJ_57 /* Module.swift in Sources */,
+				951641AB25D2CE2400D18813 /* Native.swift in Sources */,
 				OBJ_58 /* Opcode.swift in Sources */,
 				OBJ_59 /* Reader.swift in Sources */,
 				OBJ_60 /* Types.swift in Sources */,
@@ -361,6 +368,7 @@
 				OBJ_62 /* Global.swift in Sources */,
 				OBJ_63 /* ControlInstructions.swift in Sources */,
 				OBJ_64 /* Instructions.swift in Sources */,
+				951641A425D23F2300D18813 /* Function.swift in Sources */,
 				OBJ_65 /* MemoryInstructions.swift in Sources */,
 				OBJ_66 /* NumericInstructions.swift in Sources */,
 				OBJ_67 /* ParametricInstructions.swift in Sources */,

@@ -44,7 +44,7 @@ extension Reader {
     }
     
     mutating func readFloat64() -> Float64 {
-        let bytes = self.readBytes(4)
+        let bytes = self.readBytes(8)
         let littleEndianValue = bytes.withUnsafeBufferPointer {
             ($0.baseAddress!.withMemoryRebound(to: Float64.self, capacity: 1) { $0 })
         }.pointee
@@ -427,30 +427,22 @@ extension Reader {
     }
     
     mutating func readValType() -> ValType {
-        let vt = readByte()
-        guard let _ = BaseValType(rawValue: vt) else {
-            fatalError("malformed value type: \(vt)")
+        let byte = readByte()
+        guard let vt = ValType(rawValue: byte) else {
+            fatalError("malformed value type: \(byte)")
         }
         return vt
     }
     
     // MARK: entity types
     mutating func readBlockType() -> BlockType {
-        let blockType = readVarInt32()
-        if blockType < 0 {
-//            BlockTypeI32   BlockType = -1  // ()->(i32)
-//            BlockTypeI64   BlockType = -2  // ()->(i64)
-//            BlockTypeF32   BlockType = -3  // ()->(f32)
-//            BlockTypeF64   BlockType = -4  // ()->(f64)
-//            BlockTypeEmpty BlockType = -64 // ()->()
-            switch blockType {
-            case -1, -2, -3, -4, -64:
-                break
-            default:
-                fatalError("malformed block type: \(blockType)")
+        let raw = readVarInt32()
+        if raw < 0 {
+            guard let _ = BasicBlockType(rawValue: raw) else {
+                fatalError("malformed block type: \(raw)")
             }
         }
-        return blockType
+        return raw
     }
     
     mutating func readFuncType() -> FuncType {
@@ -568,7 +560,7 @@ extension Reader {
         case .truncSat:
             return readByte()
         default:
-            if Opcode.i32Load.rawValue ... Opcode.i64Store.rawValue ~= opcode.rawValue {
+            if Opcode.i32Load.rawValue ... Opcode.i64Store32.rawValue ~= opcode.rawValue {
                 return readMemArg()
             }
             return nil

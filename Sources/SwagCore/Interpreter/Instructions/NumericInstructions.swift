@@ -575,7 +575,7 @@ extension VM {
     /// 64 bits int to 32 bits
     mutating func i32WrapI64() {
         let v = operandStack.popU64()
-        let n = UInt32(v)
+        let n = UInt32(truncatingIfNeeded: v)
         operandStack.pushU32(n)
     }
     mutating func i32TruncF32S() {
@@ -729,27 +729,27 @@ extension VM {
     
     mutating func i32Extend8S() {
         let v = operandStack.popS32()
-        let n = Int32(Int8(v))
+        let n = Int32(Int8(truncatingIfNeeded: v))
         operandStack.pushS32(n)
     }
     mutating func i32Extend16S() {
         let v = operandStack.popS32()
-        let n = Int32(Int16(v))
+        let n = Int32(Int16(truncatingIfNeeded: v))
         operandStack.pushS32(n)
     }
     mutating func i64Extend8S() {
         let v = operandStack.popS64()
-        let n = Int64(Int8(v))
+        let n = Int64(Int8(truncatingIfNeeded: v))
         operandStack.pushS64(n)
     }
     mutating func i64Extend16S() {
         let v = operandStack.popS64()
-        let n = Int64(Int16(v))
+        let n = Int64(Int16(truncatingIfNeeded: v))
         operandStack.pushS64(n)
     }
     mutating func i64Extend32S() {
         let v = operandStack.popS64()
-        let n = Int64(Int32(v))
+        let n = Int64(Int32(truncatingIfNeeded: v))
         operandStack.pushS64(n)
     }
     

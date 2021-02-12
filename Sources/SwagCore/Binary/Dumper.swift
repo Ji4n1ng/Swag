@@ -208,7 +208,7 @@ public extension Dumper {
                 guard let args = instr.args as? BlockArgs else {
                     fatalError()
                 }
-                let bt = module.getBlockType(bt: args.blockType)
+                let bt = module.getFuncType(bt: args.blockType)
                 print("\(indentation)\(instr.opcode) \(bt)")
                 dumpExpr(indentation: indentation + "  ", expr: args.instrutions)
                 print("\(indentation)end")
@@ -216,7 +216,7 @@ public extension Dumper {
                 guard let args = instr.args as? IfArgs else {
                     fatalError()
                 }
-                let bt = module.getBlockType(bt: args.blockType)
+                let bt = module.getFuncType(bt: args.blockType)
                 print("\(indentation)if \(bt)")
                 dumpExpr(indentation: indentation + "  ", expr: args.instrutions1)
                 if let instrs2 = args.instrutions2 {

@@ -37,18 +37,18 @@ public struct Module {
 }
 
 public extension Module {
-    func getBlockType(bt: BlockType) -> FuncType {
-        if let bbt = BaseBlockType(rawValue: bt) {
+    func getFuncType(bt: BlockType) -> FuncType {
+        if let bbt = BasicBlockType(rawValue: bt) {
             switch bbt {
             case .i32:
                 // TODO: tag FUNC_TYPE_TAG???
-                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [BaseValType.i32.rawValue])
+                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [ValType.i32])
             case .i64:
-                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [BaseValType.i64.rawValue])
+                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [ValType.i64])
             case .f32:
-                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [BaseValType.f32.rawValue])
+                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [ValType.f32])
             case .f64:
-                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [BaseValType.f64.rawValue])
+                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [ValType.f64])
             case .empty:
                 return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [])
             }

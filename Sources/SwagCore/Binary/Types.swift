@@ -17,17 +17,14 @@ public extension Byte {
 }
 
 // MARK: - ValType
-public typealias ValType = Byte
-
-/// 4 basic valtypes
-public enum BaseValType: ValType {
+public enum ValType: Byte {
     case i32 = 0x7F
     case i64 = 0x7E
     case f32 = 0x7D
     case f64 = 0x7C
 }
 
-extension BaseValType: CustomStringConvertible {
+extension ValType: CustomStringConvertible {
     public var description: String {
         switch self {
         case .i32:
@@ -38,16 +35,6 @@ extension BaseValType: CustomStringConvertible {
             return "f32"
         case .f64:
             return "f64"
-        }
-    }
-}
-
-public extension ValType {
-    var description: String {
-        if let baseValType = BaseValType(rawValue: self) {
-            return baseValType.description
-        } else {
-            return "invalid valType: \(self.hex)"
         }
     }
 }

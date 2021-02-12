@@ -16,69 +16,81 @@ final class SwagCoreTests: XCTestCase {
         .deletingLastPathComponent()
         .appendingPathComponent("Fixtures")
     
-    func testDumper() throws {
-        let helloWorld = fixtures.appendingPathComponent("01_HelloWorld")
-            .appendingPathComponent("HelloWorld.wasm")
-        let data = try XCTUnwrap(NSData(contentsOf: helloWorld))
+    func instantiate(_ path: URL) throws -> VM {
+        let data = try XCTUnwrap(NSData(contentsOf: path))
         var buffer = [Byte].init(repeating: 0, count: data.length)
         data.getBytes(&buffer, length: data.length)
         var reader = Reader(data: buffer)
         let module = reader.readModule()
         var dumper = Dumper(module: module)
         dumper.dump()
+        let vm = VM(module: module)
+        return vm
+    }
+    
+    func testInstructions() throws {
+        try testNumberic()
+        try testParametric()
+    }
+    
+    func testNumberic() throws {
+        let casePath = fixtures.appendingPathComponent("00_Instructions")
+            .appendingPathComponent("NumericInstructions.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
+    }
+    
+    func testParametric() throws {
+        let casePath = fixtures.appendingPathComponent("00_Instructions")
+            .appendingPathComponent("ParametricInstructions.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
+    }
+    
+    func testHelloworld() throws {
+        let casePath = fixtures.appendingPathComponent("01_HelloWorld")
+            .appendingPathComponent("HelloWorld.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
     }
     
     func testFibonacci() throws {
-        let fibonacci = fixtures.appendingPathComponent("02_Fibonacci")
+        let casePath = fixtures.appendingPathComponent("02_Fibonacci")
             .appendingPathComponent("Fibonacci.wasm")
-        let data = try XCTUnwrap(NSData(contentsOf: fibonacci))
-        var buffer = [Byte].init(repeating: 0, count: data.length)
-        data.getBytes(&buffer, length: data.length)
-        var reader = Reader(data: buffer)
-        let module = reader.readModule()
-        var dumper = Dumper(module: module)
-        dumper.dump()
-        var vm = VM(module: module)
-        vm.loop()
-        print("🎉🎉🎉🎉🎉🎉")
+        var instance = try instantiate(casePath)
+        instance.loop()
     }
     
     // assert function is defined internally
     func testFactorial() throws {
-        let factorial = fixtures.appendingPathComponent("03_Factorial")
+        let casePath = fixtures.appendingPathComponent("03_Factorial")
             .appendingPathComponent("Factorial.wasm")
-        let data = try XCTUnwrap(NSData(contentsOf: factorial))
-        var buffer = [Byte].init(repeating: 0, count: data.length)
-        data.getBytes(&buffer, length: data.length)
-        var reader = Reader(data: buffer)
-        let module = reader.readModule()
-        var dumper = Dumper(module: module)
-        dumper.dump()
-        var vm = VM(module: module)
-        vm.loop()
+        var instance = try instantiate(casePath)
+        instance.loop()
         print("🎉🎉🎉🎉🎉🎉")
     }
     
     // assert function is provided by VM
     func testFactorial2() throws {
-        let factorial = fixtures.appendingPathComponent("03_Factorial")
+        let casePath = fixtures.appendingPathComponent("03_Factorial")
             .appendingPathComponent("Factorial2.wasm")
-        let data = try XCTUnwrap(NSData(contentsOf: factorial))
-        var buffer = [Byte].init(repeating: 0, count: data.length)
-        data.getBytes(&buffer, length: data.length)
-        var reader = Reader(data: buffer)
-        let module = reader.readModule()
-        var dumper = Dumper(module: module)
-        dumper.dump()
-        var vm = VM(module: module)
-        vm.loop()
-        print("🎉🎉🎉🎉🎉🎉")
+        var instance = try instantiate(casePath)
+        instance.loop()
+    }
+    
+    func testMemory() throws {
+        let casePath = fixtures.appendingPathComponent("04_Memory")
+            .appendingPathComponent("Memory.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
     }
     
     static var allTests = [
-        ("testDumper", testDumper),
+        ("testInstructions", testInstructions),
+        ("testHelloworld", testHelloworld),
         ("testFibonacci", testFibonacci),
         ("testFactorial", testFactorial),
-        ("testFactorial2", testFactorial2)
+        ("testFactorial2", testFactorial2),
+        ("testMemory", testMemory)
     ]
 }

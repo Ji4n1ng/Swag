@@ -20,23 +20,23 @@ extension VM {
     }
     
     mutating func block(_ args: BlockArgs) {
-        let bt = module.getBlockType(bt: args.blockType)
-        enterBlock(opcode: .block, blockType: bt, instrs: args.instrutions)
+        let ft = module.getFuncType(bt: args.blockType)
+        enterBlock(opcode: .block, funcType: ft, instrs: args.instrutions)
     }
     
     mutating func loop(_ args: BlockArgs) {
-        let bt = module.getBlockType(bt: args.blockType)
-        enterBlock(opcode: .loop, blockType: bt, instrs: args.instrutions)
+        let ft = module.getFuncType(bt: args.blockType)
+        enterBlock(opcode: .loop, funcType: ft, instrs: args.instrutions)
     }
     
     mutating func `if`(_ args: IfArgs) {
-        let bt = module.getBlockType(bt: args.blockType)
+        let ft = module.getFuncType(bt: args.blockType)
         let bool = operandStack.popBool()
         if bool {
-            enterBlock(opcode: .if, blockType: bt, instrs: args.instrutions1)
+            enterBlock(opcode: .if, funcType: ft, instrs: args.instrutions1)
         } else {
             let instrs = args.instrutions2 ?? [Instruction]()
-            enterBlock(opcode: .if, blockType: bt, instrs: instrs)
+            enterBlock(opcode: .if, funcType: ft, instrs: instrs)
         }
     }
     
@@ -76,11 +76,68 @@ extension VM {
     }
     
     mutating func call(funcIdx: FuncIdx) {
-        let importedFuncCount = module.importSec?.count ?? 0
-        if funcIdx < importedFuncCount {
-            callAssertFunc(funcIdx: funcIdx)
+        let function = funcs[Int(funcIdx)]
+        callFunc(function)
+    }
+    
+    mutating func callFunc(_ f: Function) {
+        if f.code != nil {
+            callInternalFunc(f)
         } else {
-            callInternalFunc(funcIdx: UInt32(Int(funcIdx) - importedFuncCount))
+            callExternalFunc(f)
+        }
+    }
+    
+    mutating func callExternalFunc(_ f: Function) {
+        let args = popArgs(f.type)
+        guard let nativeFunc = f.swiftFunc else { fatalError() }
+        do {
+            let results = try nativeFunc(args)
+            pushResults(f.type, results: results)
+        } catch {
+            fatalError()
+        }
+    }
+    
+    mutating func popArgs(_ ft: FuncType) -> [WasmVal] {
+        var args = [WasmVal]()
+        for paramType in ft.paramTypes {
+            var val: Any
+            switch paramType {
+            case .i32:
+                val = operandStack.popS32()
+            case .i64:
+                val = operandStack.popS64()
+            case .f32:
+                val = operandStack.popF32()
+            case .f64:
+                val = operandStack.popF64()
+            }
+            let arg = WasmVal(type: paramType, val: val)
+            args.append(arg)
+        }
+        return args
+    }
+    
+    mutating func pushResults(_ ft: FuncType, results: [WasmVal]) {
+        if ft.resultTypes.count != results.count {
+            fatalError()
+        }
+        for result in results {
+            switch result.type {
+            case .i32:
+                guard let val = result.val as? Int32 else { fatalError() }
+                operandStack.pushS32(val)
+            case .i64:
+                guard let val = result.val as? Int64 else { fatalError() }
+                operandStack.pushS64(val)
+            case .f32:
+                guard let val = result.val as? Float32 else { fatalError() }
+                operandStack.pushF32(val)
+            case .f64:
+                guard let val = result.val as? Float64 else { fatalError() }
+                operandStack.pushF64(val)
+            }
         }
     }
     
@@ -99,11 +156,9 @@ operand stack:
 |  ............ |
 */
     
-    mutating func callInternalFunc(funcIdx: FuncIdx) {
-        guard let funcTypeIndex = module.funcSec?[Int(funcIdx)] else { fatalError() }
-        guard let funcType = module.typeSec?[Int(funcTypeIndex)] else { fatalError() }
-        guard let code = module.codeSec?[Int(funcIdx)] else { fatalError() }
-        enterBlock(opcode: .call, blockType: funcType, instrs: code.expr)
+    mutating func callInternalFunc(_ f: Function) {
+        guard let code = f.code else { fatalError() }
+        enterBlock(opcode: .call, funcType: f.type, instrs: code.expr)
         
         // alloc locals
         let localCount = Int(code.getLocalCount())
@@ -112,33 +167,8 @@ operand stack:
         }
     }
     
-    mutating func callAssertFunc(funcIdx: FuncIdx) {
-        guard let importItem = module.importSec?[Int(funcIdx)] else { fatalError() }
+    mutating func callIndirect() {
         
-        switch importItem.name {
-        case "assert_true":
-            assertEq(operandStack.popBool(), true)
-        case "assert_false":
-            assertEq(operandStack.popBool(), false)
-        case "assert_eq_i32":
-            assertEq(operandStack.popU32(), operandStack.popU32())
-        case "assert_eq_i64":
-            assertEq(operandStack.popU64(), operandStack.popU64())
-        case "assert_eq_f32":
-            assertEq(operandStack.popF32(), operandStack.popF32())
-        case "assert_eq_f64":
-            assertEq(operandStack.popF64(), operandStack.popF64())
-        default:
-            print("TODO: callAssertFunc")
-        }
-    }
-    
-    func assertEq<T: Equatable>(_ a: T, _ b: T) {
-        if a != b {
-            print("Error: \(a) != \(b)")
-        } else {
-            print("Equal: \(a) == \(b)")
-        }
     }
     
 }
