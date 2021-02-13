@@ -135,7 +135,7 @@ public struct VM {
         }
         if let elemSec = module.elemSec {
             for elem in elemSec {
-                let tableType = TableType(elemType: FUNC_REF, limits: Limits(tag: .min, min: 0))
+                let tableType = TableType(limits: Limits(tag: .min, min: 0))
                 table = Table(type: tableType, elems: [])
                 for instr in elem.offset {
                     execInstr(instr)
@@ -152,6 +152,7 @@ public struct VM {
 }
 
 extension VM {
+    
     // MARK: - block stack
     mutating func enterBlock(opcode: Opcode, funcType: FuncType, instrs: [Instruction]) {
         let basePointer = operandStack.size() - funcType.paramTypes.count

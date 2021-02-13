@@ -21,9 +21,9 @@ final class SwagCoreTests: XCTestCase {
         var buffer = [Byte].init(repeating: 0, count: data.length)
         data.getBytes(&buffer, length: data.length)
         var reader = Reader(data: buffer)
-        let module = reader.readModule()
-        var dumper = Dumper(module: module)
-        dumper.dump()
+        let module = try reader.readModule()
+//        var dumper = Dumper(module: module)
+//        dumper.dump()
         let vm = VM(module: module)
         return vm
     }

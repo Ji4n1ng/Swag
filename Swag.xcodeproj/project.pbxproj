@@ -24,6 +24,8 @@
 		951641A425D23F2300D18813 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951641A325D23F2300D18813 /* Function.swift */; };
 		951641AB25D2CE2400D18813 /* Native.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951641AA25D2CE2400D18813 /* Native.swift */; };
 		951641BC25D6978500D18813 /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951641BB25D6978500D18813 /* Table.swift */; };
+		951641C825D7998800D18813 /* ParseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951641C725D7998800D18813 /* ParseError.swift */; };
+		951641D025D7E04300D18813 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951641CF25D7E04300D18813 /* Extensions.swift */; };
 		95B958A825C2ED09009A6131 /* Dumper.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Dumper.swift */; };
 		OBJ_47 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* main.swift */; };
 		OBJ_49 /* SwagCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Swag::SwagCore::Product" /* SwagCore.framework */; };
@@ -85,6 +87,8 @@
 		951641A325D23F2300D18813 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		951641AA25D2CE2400D18813 /* Native.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Native.swift; sourceTree = "<group>"; };
 		951641BB25D6978500D18813 /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
+		951641C725D7998800D18813 /* ParseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseError.swift; sourceTree = "<group>"; };
+		951641CF25D7E04300D18813 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		OBJ_10 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		OBJ_13 /* Instruction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instruction.swift; sourceTree = "<group>"; };
 		OBJ_14 /* Module.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Module.swift; sourceTree = "<group>"; };
@@ -140,11 +144,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		951641CE25D7DFF400D18813 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				951641CF25D7E04300D18813 /* Extensions.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		OBJ_11 /* SwagCore */ = {
 			isa = PBXGroup;
 			children = (
 				OBJ_12 /* Binary */,
 				OBJ_18 /* Interpreter */,
+				951641CE25D7DFF400D18813 /* Utilities */,
 			);
 			name = SwagCore;
 			path = Sources/SwagCore;
@@ -159,6 +172,7 @@
 				OBJ_15 /* Opcode.swift */,
 				OBJ_16 /* Reader.swift */,
 				OBJ_9 /* Dumper.swift */,
+				951641C725D7998800D18813 /* ParseError.swift */,
 			);
 			path = Binary;
 			sourceTree = "<group>";
@@ -369,6 +383,8 @@
 				OBJ_60 /* Types.swift in Sources */,
 				951641BC25D6978500D18813 /* Table.swift in Sources */,
 				OBJ_61 /* ControlFrame.swift in Sources */,
+				951641C825D7998800D18813 /* ParseError.swift in Sources */,
+				951641D025D7E04300D18813 /* Extensions.swift in Sources */,
 				OBJ_62 /* Global.swift in Sources */,
 				OBJ_63 /* ControlInstructions.swift in Sources */,
 				OBJ_64 /* Instructions.swift in Sources */,

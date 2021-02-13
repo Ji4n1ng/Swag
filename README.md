@@ -18,13 +18,15 @@ Since the community has many wasm implementations, both inside and outside the b
     - [x] Memory
     - [x] Control stack
     - [x] Global
-    - [ ] Instructions
+    - [x] Instructions
         - [x] Parametric Instructions
         - [x] Numeric Instructions
         - [x] Memory Instructions
         - [x] Variable Instructions
-        - [ ] Control Instructions
+        - [x] Control Instructions
     - [ ] Error handling
+        - [x] Parse
+        - [ ] Interpreter 
 - **Validator**
     - [ ] Module validator
     - [ ] Code validator

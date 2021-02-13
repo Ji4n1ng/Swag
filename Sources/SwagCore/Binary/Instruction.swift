@@ -37,6 +37,14 @@ public enum BasicBlockType: BlockType {
     case f64 = -4
     /// ()->()
     case empty = -64
+    
+    init(_ raw: BlockType) throws {
+        if let bbt = BasicBlockType(rawValue: raw) {
+            self = bbt
+        } else {
+            throw ParseError.invalidBasicBlockType(raw)
+        }
+    }
 }
 
 // block & loop
@@ -56,5 +64,3 @@ public struct BrTableArgs {
     public var labels: [LabelIdx]
     public var `default`: LabelIdx
 }
-
-//

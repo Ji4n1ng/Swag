@@ -8,6 +8,7 @@
 import Foundation
 
 // MARK: - Byte
+
 public typealias Byte = UInt8
 
 public extension Byte {
@@ -16,12 +17,23 @@ public extension Byte {
     }
 }
 
-// MARK: - ValType
+// MARK: - Value Types
+
+/// *Value types* classify the individual values that WebAssembly
+/// code can compute with and the values that a variable accepts.
 public enum ValType: Byte {
     case i32 = 0x7F
     case i64 = 0x7E
     case f32 = 0x7D
     case f64 = 0x7C
+    
+    init(_ byte: Byte) throws {
+        if let vt = ValType(rawValue: byte) {
+            self = vt
+        } else {
+            throw ParseError.invalidValType(byte)
+        }
+    }
 }
 
 extension ValType: CustomStringConvertible {
@@ -39,29 +51,13 @@ extension ValType: CustomStringConvertible {
     }
 }
 
-public typealias MemType = Limits
-
-// MARK: - Limits
-public struct Limits {
-    public var tag: LimitsTag
-    public var min: UInt32
-    public var max: UInt32?
-}
-
-public enum LimitsTag: Byte {
-    case min = 0
-    case minMax = 1
-}
-
-//extension Limits: CustomStringConvertible {
-//    public var description: String {
-//        return "{min: \(self.min.hex), mut: \(self.max.hex)}"
-//    }
-//}
-
 // MARK: - FuncType
+
+/// *Function types* classify the signature of functions,
+/// mapping a vector of parameters to a vector of results.
+/// They are also used to classify the inputs and outputs
+/// of instructions.
 public struct FuncType {
-    public var tag: Byte
     public var paramTypes: [ValType]
     public var resultTypes: [ValType]
 }
@@ -116,26 +112,109 @@ extension FuncType: CustomStringConvertible {
     }
 }
 
+// MARK: - Limits
+
+/// *Limits* classify the size range of resizeable storage
+/// associated with memory types and table types.
+/// If no maximum is given, the respective storage can
+/// grow to any size.
+public struct Limits {
+    public var tag: LimitsTag
+    public var min: UInt32
+    public var max: UInt32?
+}
+
+extension Limits: CustomStringConvertible {
+    public var description: String {
+        switch self.tag {
+        case .min:
+            return "{min: \(self.min)}"
+        case .minMax:
+            if let max = self.max {
+                return "{min: \(self.min), max: \(max)}"
+            } else {
+                return "{min: \(self.min), max: nil}"
+            }
+        }
+    }
+}
+
+public enum LimitsTag: Byte {
+    case min = 0
+    case minMax = 1
+    
+    init(_ byte: Byte) throws {
+        if let lt = LimitsTag(rawValue: byte) {
+            self = lt
+        } else {
+            throw ParseError.invalidValType(byte)
+        }
+    }
+}
+
+// MARK: - Memory Type
+
+/// *Memory types* classify linear memories and their size range.
+/// The limits constrain the minimum and optionally the maximum
+/// size of a memory. The limits are given in units of page size.
+public typealias MemType = Limits
+
 // MARK: - TableType
+
+/// *Table types* classify tables over elements of element types
+/// within a size range.
 public struct TableType {
-    /// currently this can only be 0x70
+    /// In future versions of WebAssembly, additional element
+    /// types may be introduced. Currently this can only be
+    /// FUNC_REF (0x70)
     public var elemType: Byte
+    /// Like memories, tables are constrained by limits for
+    /// their minimum and optionally maximum size. The limits are
+    /// given in numbers of entries.
     public var limits: Limits
+    
+    init(elemType: Byte = FUNC_REF, limits: Limits) {
+        self.elemType = elemType
+        self.limits = limits
+    }
 }
 
 // MARK: - GlobalType
+
+/// *Global types* classify global variables, which hold a value
+/// and can either be mutable or immutable.
 public struct GlobalType {
     public var valType: ValType
     public var mut: MutType
 }
 
+extension GlobalType: CustomStringConvertible {
+    public var description: String {
+        return "{type: \(self.valType.description), mut: \(self.mut.description)}"
+    }
+}
+
+/// mutable or immutable
 public enum MutType: Byte {
     case const = 0
     case `var` = 1
+    
+    init(_ byte: Byte) throws {
+        if let mut = MutType(rawValue: byte) {
+            self = mut
+        } else {
+            throw ParseError.invalidMutType(byte)
+        }
+    }
 }
 
-extension GlobalType: CustomStringConvertible {
+extension MutType: CustomStringConvertible {
     public var description: String {
-        return "{type: \(self.valType.description), mut: \(self.mut)}"
+        switch self {
+        case .const:
+            return "const(immutable)"
+        case .var:
+            return "var(mutable)"
+        }
     }
 }

@@ -195,6 +195,14 @@ public enum Opcode: Byte {
     case i64Extend16S      = 0xC3 // i64.extend16_s
     case i64Extend32S      = 0xC4 // i64.extend32_s
     case truncSat          = 0xFC // <i32|64>.trunc_sat_<f32|64>_<s|u>
+    
+    init(_ byte: Byte) throws {
+        if let opcode = Opcode(rawValue: byte) {
+            self = opcode
+        } else {
+            throw ParseError.invalidOpcode(byte)
+        }
+    }
 }
 
 extension Opcode: CustomStringConvertible {

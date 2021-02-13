@@ -7,9 +7,6 @@
 
 import Foundation
 
-// Index:
-// Function signature, Function, Table, Memory and Global variable have their own index space in module.
-// Local variable and Label have their own index space in function.
 public typealias TypeIdx = UInt32
 public typealias FuncIdx = UInt32
 public typealias TableIdx = UInt32
@@ -19,6 +16,7 @@ public typealias LocalIdx = UInt32
 public typealias LabelIdx = UInt32
 
 // MARK: - Module
+
 public struct Module {
     public var magic: UInt32
     public var version: UInt32
@@ -41,16 +39,15 @@ public extension Module {
         if let bbt = BasicBlockType(rawValue: bt) {
             switch bbt {
             case .i32:
-                // TODO: tag FUNC_TYPE_TAG???
-                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [ValType.i32])
+                return FuncType(paramTypes: [], resultTypes: [ValType.i32])
             case .i64:
-                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [ValType.i64])
+                return FuncType(paramTypes: [], resultTypes: [ValType.i64])
             case .f32:
-                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [ValType.f32])
+                return FuncType(paramTypes: [], resultTypes: [ValType.f32])
             case .f64:
-                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [ValType.f64])
+                return FuncType(paramTypes: [], resultTypes: [ValType.f64])
             case .empty:
-                return FuncType(tag: FUNC_TYPE_TAG, paramTypes: [], resultTypes: [])
+                return FuncType(paramTypes: [], resultTypes: [])
             }
         } else {
             if let type = self.typeSec?[Int(bt)] {
@@ -85,13 +82,15 @@ public enum SectionID: Byte {
     case data
 }
 
-// MARK: - CustomSec
+// MARK: - Custom Section
+
 public struct CustomSec {
     public var name: String
     public var bytes: [Byte]
 }
 
-// MARK: - Import
+// MARK: - Import Section
+
 public struct Import {
     /// module name
     public var module: String
@@ -106,6 +105,14 @@ public enum ImportTag: Byte {
     case table
     case mem
     case global
+    
+    init(_ byte: Byte) throws {
+        if let tag = ImportTag(rawValue: byte) {
+            self = tag
+        } else {
+            throw ParseError.invalidImportTag(byte)
+        }
+    }
 }
 
 public struct ImportDesc {
@@ -116,13 +123,15 @@ public struct ImportDesc {
     public var global: GlobalType?
 }
 
-// MARK: - Global
+// MARK: - Global Section
+
 public struct Global {
     public var type: GlobalType
     public var `init`: Expr
 }
 
-// MARK: - Export
+// MARK: - Export Section
+
 public struct Export {
     public var name: String
     public var desc: ExportDesc
@@ -133,6 +142,14 @@ public enum ExportTag: Byte {
     case table
     case mem
     case global
+    
+    init(_ byte: Byte) throws {
+        if let tag = ExportTag(rawValue: byte) {
+            self = tag
+        } else {
+            throw ParseError.invalidExportTag(byte)
+        }
+    }
 }
 
 public struct ExportDesc {
@@ -140,14 +157,16 @@ public struct ExportDesc {
     public var idx: UInt32
 }
 
-// MARK: - Elem
+// MARK: - Elem Section
+
 public struct Elem {
     public var table: TableIdx
     public var offset: Expr
     public var `init`: [FuncIdx]
 }
 
-// MARK: - Code
+// MARK: - Code Section
+
 public struct Code {
     public var locals: [Locals]
     public var expr: Expr
@@ -168,7 +187,8 @@ extension Code {
     }
 }
 
-// MARK: - Data
+// MARK: - Data Section
+
 public struct Data {
     public var mem: MemIdx
     public var offset: Expr
