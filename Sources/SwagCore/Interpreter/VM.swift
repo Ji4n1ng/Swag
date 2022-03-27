@@ -50,6 +50,10 @@ public struct VM {
         } else {
             guard let exportSec = module.exportSec else { fatalError() }
             for exp in exportSec {
+//                if exp.desc.tag == .func && exp.name == "__wasm_call_ctors" {
+//                    call(funcIdx: exp.desc.idx)
+//                    break
+//                }
                 if exp.desc.tag == .func && exp.name == "main" {
                     call(funcIdx: exp.desc.idx)
                     break
@@ -101,6 +105,9 @@ public struct VM {
                     switch imp.name {
                     case "print_char":
                         let function = Function(funcType, swiftFunc: printChar)
+                        funcs.append(function)
+                    case "print_int":
+                        let function = Function(funcType, swiftFunc: printInt)
                         funcs.append(function)
                     case "assert_true":
                         let function = Function(funcType, swiftFunc: assertTrue)
@@ -155,7 +162,10 @@ extension VM {
     
     // MARK: - block stack
     mutating func enterBlock(opcode: Opcode, funcType: FuncType, instrs: [Instruction]) {
-        let basePointer = operandStack.size() - funcType.paramTypes.count
+        var basePointer = operandStack.size() - funcType.paramTypes.count
+        if basePointer < 0 {
+            basePointer = 0
+        }
         let controlFrame = ControlFrame(opcode: opcode, blockType: funcType, instrs: instrs, bp: basePointer, pc: 0)
         controlStack.pushControlFrame(controlFrame)
         if opcode == .call {
@@ -206,6 +216,13 @@ extension VM {
     }
     
     mutating func execInstr(_ instr: Instruction) {
+        // print
+        if let args = instr.args {
+            print("\(instr.opcode) \(args)")
+        } else {
+            print("\(instr.opcode)")
+        }
+        
         switch instr.opcode {
         // MARK: Control Instructions
         case .unreachable:

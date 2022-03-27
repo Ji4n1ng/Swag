@@ -47,6 +47,13 @@ func printChar(_ args: [WasmVal]) throws -> [WasmVal] {
     return []
 }
 
+func printInt(_ args: [WasmVal]) throws -> [WasmVal] {
+    guard let arg = args.first else { fatalError() }
+    guard let val = arg.val as? Int32 else { fatalError() }
+    log(val)
+    return []
+}
+
 func assertTrue(_ args: [WasmVal]) throws -> [WasmVal] {
     guard let val = args.first?.val as? Int32 else { fatalError() }
     assertEq(val, 1)

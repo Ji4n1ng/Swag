@@ -93,6 +93,13 @@ final class SwagCoreTests: XCTestCase {
         instance.loop()
     }
     
+    func testTest() throws {
+        let casePath = fixtures.appendingPathComponent("test")
+            .appendingPathComponent("trace1_int.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
+    }
+
     static var allTests = [
         ("testInstructions", testInstructions),
         ("testHelloworld", testHelloworld),
