@@ -93,6 +93,35 @@ final class SwagCoreTests: XCTestCase {
         instance.loop()
     }
     
+    // This is to test trace
+    func testTraceInt() throws {
+        let casePath = fixtures.appendingPathComponent("06_Trace_Int")
+            .appendingPathComponent("trace1_int.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
+    }
+    
+    func testTraceStr() throws {
+        let casePath = fixtures.appendingPathComponent("06_Trace_Int")
+            .appendingPathComponent("trace2_str.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
+    }
+    
+    func testTraceArray() throws {
+        let casePath = fixtures.appendingPathComponent("06_Trace_Int")
+            .appendingPathComponent("trace3_array.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
+    }
+    
+    func testTraceStackBuffer() throws {
+        let casePath = fixtures.appendingPathComponent("06_Trace_Int")
+            .appendingPathComponent("trace4.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
+    }
+    
     func testTest() throws {
         let casePath = fixtures.appendingPathComponent("test")
             .appendingPathComponent("trace1_int.wasm")
