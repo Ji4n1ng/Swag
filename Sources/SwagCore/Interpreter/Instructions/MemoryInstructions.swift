@@ -124,7 +124,10 @@ extension VM {
         let offset = getOffset(memArg: memArg)
         memory.read(offset: offset, buf: &buf)
         let unwrapBuf = buf.compactMap { $0 }
-        guard unwrapBuf.count == buf.count else { fatalError() }
+        guard unwrapBuf.count == buf.count else {
+            // `buf` has "nil" elements. Just return 0.
+            return 0
+        }
         let result = unwrapBuf.withUnsafeBufferPointer {
             ($0.baseAddress!.withMemoryRebound(to: UInt32.self, capacity: 1) { $0 })
         }.pointee
