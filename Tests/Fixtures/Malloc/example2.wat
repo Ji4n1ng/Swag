@@ -459,12 +459,28 @@
   )
 
   (func $main (export "main")
-    (local $new_ptr i32)
-    (local.set $new_ptr (call $malloc (i32.const 1024)))
-    (local.get $new_ptr) (i32.const 65)
+    (local $ptr1 i32)
+    (local $ptr2 i32)
+    ;; malloc 1024 to $ptr1
+    (local.set $ptr1 (call $malloc (i32.const 1024)))
+    (call $print_int (local.get $ptr1))
+    ;; write 65 to $ptr1+243
+    (local.get $ptr1) (i32.const 65)
     (i32.store8 offset=243)
-    (call $print_int (call $malloc (i32.const 1024)))
-    (call $print_int (call $malloc (i32.const 1024)))
+    ;; write 66 to $ptr1+1048
+    (local.get $ptr1) (i32.const 66)
+    (i32.store8 offset=1048)
+
+    
+    ;; malloc 2048 to $ptr2
+    (local.set $ptr2 (call $malloc (i32.const 2048)))
+    (call $print_int (local.get $ptr2))
+    ;; write 65 to $ptr1+243
+    (local.get $ptr2) (i32.const 67)
+    (i32.store8 offset=33)
+    ;; write 66 to $ptr1+1048
+    (local.get $ptr2) (i32.const 66)
+    (i32.store8 offset=1048)
   )
 
 

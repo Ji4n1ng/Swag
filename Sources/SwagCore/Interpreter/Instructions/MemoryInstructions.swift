@@ -24,11 +24,13 @@ extension VM {
     
     mutating func i32Load(memArg: MemArg) {
         let val = readU32(memArg: memArg)
+//        log("val: \(val)")
         operandStack.pushU32(val)
     }
     
     mutating func i64Load(memArg: MemArg) {
         let val = readU64(memArg: memArg)
+        
         operandStack.pushU64(val)
     }
     
