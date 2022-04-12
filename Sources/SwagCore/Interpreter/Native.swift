@@ -24,6 +24,7 @@ enum LogType: String {
     case json = "💡"
     case fuck = "🖕"
     case happy = "😄"
+    case ins = "🌟"
 }
 
 func log<T>(_ message: T,

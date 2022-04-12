@@ -77,6 +77,18 @@ extension VM {
     
     mutating func call(funcIdx: FuncIdx) {
         let function = funcs[Int(funcIdx)]
+        // MARK: Hook
+        if let hookDict = hookDict {
+            for (hookFuncIdx, hookFuncName) in hookDict {
+                if funcIdx == hookFuncIdx {
+                    log("🪝 hook: \(hookFuncName) \(function.type.signature())", .native, .ins)
+                    let paramCount = function.type.paramTypes.count
+                    let params = operandStack.getTopOperands(paramCount)
+                    log("🪝 \(hookFuncName)'s parameter is \(params)", .native, .ins)
+                }
+            }
+        }
+        // call
         callFunc(function)
     }
     
@@ -158,7 +170,7 @@ operand stack:
     
     mutating func callInternalFunc(_ f: Function) {
         guard let code = f.code else { fatalError() }
-        enterBlock(opcode: .call, funcType: f.type, instrs: code.expr)
+        enterBlock(opcode: .call, funcType: f.type, instrs: code.expr, function: f)
         
         // alloc locals
         let localCount = Int(code.getLocalCount())

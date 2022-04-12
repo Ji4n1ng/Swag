@@ -126,7 +126,10 @@ final class SwagCoreTests: XCTestCase {
         let casePath = fixtures.appendingPathComponent("Malloc")
             .appendingPathComponent("example2.wasm")
         var instance = try instantiate(casePath)
+        let hookDict: [FuncIdx: String] = [10: "malloc"]
+        instance.hookDict = hookDict
         instance.loop()
+        
     }
 
     static var allTests = [

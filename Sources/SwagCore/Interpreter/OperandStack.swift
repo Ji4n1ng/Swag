@@ -69,6 +69,11 @@ extension OperandStack {
         return slots[Int(index)]
     }
     
+    func getTopOperands(_ n: Int) -> [UInt64] {
+        let vals = Array(slots.suffix(n))
+        return vals
+    }
+    
     mutating func setOperand(at index: UInt32, with val: UInt64) {
         slots[Int(index)] = val
     }

@@ -15,6 +15,8 @@ public struct ControlFrame {
     var bp: Int
     /// program counter
     var pc: Int
+    /// function
+    var function: Function?
 }
 
 public struct ControlStack {

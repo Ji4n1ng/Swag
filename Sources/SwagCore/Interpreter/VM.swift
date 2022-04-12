@@ -24,6 +24,10 @@ public struct VM {
     /// from the call frame of the current function.
     public var local0Index: UInt32
     
+    // MARK: Hook
+    /// for hooking
+    public var hookDict: [FuncIdx: String]?
+    
     public init(module: Module) {
         self.module = module
         operandStack = OperandStack()
@@ -90,7 +94,8 @@ public struct VM {
             for (i, typeIdx) in funcSec.enumerated() {
                 guard let funcType = module.typeSec?[Int(typeIdx)] else { continue }
                 guard let code = module.codeSec?[i] else { continue }
-                let function = Function(funcType, code: code)
+                let funcIdx = FuncIdx(i + funcs.count)
+                let function = Function(funcIdx, type: funcType, code: code)
                 funcs.append(function)
             }
         }
@@ -104,28 +109,28 @@ public struct VM {
                     guard let funcType = module.typeSec?[Int(typeIdx)] else { continue }
                     switch imp.name {
                     case "print_char":
-                        let function = Function(funcType, swiftFunc: printChar)
+                        let function = Function(type: funcType, swiftFunc: printChar)
                         funcs.append(function)
                     case "print_int":
-                        let function = Function(funcType, swiftFunc: printInt)
+                        let function = Function(type: funcType, swiftFunc: printInt)
                         funcs.append(function)
                     case "assert_true":
-                        let function = Function(funcType, swiftFunc: assertTrue)
+                        let function = Function(type: funcType, swiftFunc: assertTrue)
                         funcs.append(function)
                     case "assert_false":
-                        let function = Function(funcType, swiftFunc: assertFalse)
+                        let function = Function(type: funcType, swiftFunc: assertFalse)
                         funcs.append(function)
                     case "assert_eq_i32":
-                        let function = Function(funcType, swiftFunc: assertEqI32)
+                        let function = Function(type: funcType, swiftFunc: assertEqI32)
                         funcs.append(function)
                     case "assert_eq_i64":
-                        let function = Function(funcType, swiftFunc: assertEqI64)
+                        let function = Function(type: funcType, swiftFunc: assertEqI64)
                         funcs.append(function)
                     case "assert_eq_f32":
-                        let function = Function(funcType, swiftFunc: assertEqF32)
+                        let function = Function(type: funcType, swiftFunc: assertEqF32)
                         funcs.append(function)
                     case "assert_eq_f64":
-                        let function = Function(funcType, swiftFunc: assertEqF64)
+                        let function = Function(type: funcType, swiftFunc: assertEqF64)
                         funcs.append(function)
                     default:
                         fatalError("Native funcs no found")
@@ -161,12 +166,12 @@ public struct VM {
 extension VM {
     
     // MARK: - block stack
-    mutating func enterBlock(opcode: Opcode, funcType: FuncType, instrs: [Instruction]) {
+    mutating func enterBlock(opcode: Opcode, funcType: FuncType, instrs: [Instruction], function: Function? = nil) {
         var basePointer = operandStack.size() - funcType.paramTypes.count
         if basePointer < 0 {
             basePointer = 0
         }
-        let controlFrame = ControlFrame(opcode: opcode, blockType: funcType, instrs: instrs, bp: basePointer, pc: 0)
+        let controlFrame = ControlFrame(opcode: opcode, blockType: funcType, instrs: instrs, bp: basePointer, pc: 0, function: function)
         controlStack.pushControlFrame(controlFrame)
         if opcode == .call {
             local0Index = UInt32(basePointer)
@@ -182,6 +187,20 @@ extension VM {
         let results = operandStack.popU64s(controlFrame.blockType.resultTypes.count)
         operandStack.popU64s(operandStack.size() - controlFrame.bp)
         operandStack.pushU64s(results)
+        // MARK: Hook
+        if let hookDict = hookDict,
+           let function = controlFrame.function {
+            // vm is exiting function
+            for (funcIndex, funcName) in hookDict {
+                if funcIndex == function.index {
+                    // hook function
+                    let resultCount = function.type.resultTypes.count
+                    let results = operandStack.getTopOperands(resultCount)
+                    log("🪝 The result of the hooked \(funcName) is \(results)", .native, .ins)
+                }
+            }
+        }
+        
         if controlFrame.opcode == .call && controlStack.controlDepth() > 0 {
             let (lastCallFrame, _) = controlStack.topCallFrame()
             if let lastCallFrame = lastCallFrame {
