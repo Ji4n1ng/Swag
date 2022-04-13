@@ -91,10 +91,11 @@ public struct VM {
     mutating func initFuncs() {
         linkNativeFuncs()
         if let funcSec = module.funcSec {
+            let existingFuncCount = funcs.count
             for (i, typeIdx) in funcSec.enumerated() {
                 guard let funcType = module.typeSec?[Int(typeIdx)] else { continue }
                 guard let code = module.codeSec?[i] else { continue }
-                let funcIdx = FuncIdx(i + funcs.count)
+                let funcIdx = FuncIdx(i + existingFuncCount)
                 let function = Function(funcIdx, type: funcType, code: code)
                 funcs.append(function)
             }
