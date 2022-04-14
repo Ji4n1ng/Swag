@@ -461,11 +461,9 @@ extension VM {
     mutating func f32Min() {
         let v2 = operandStack.popF32()
         let v1 = operandStack.popF32()
-        let isV1NaN = v1 == .nan
-        let isV2NaN = v2 == .nan
-        if isV1NaN && !isV2NaN {
+        if v1.isNaN && !v2.isNaN {
             operandStack.pushF32(v1)
-        } else if isV2NaN && !isV1NaN {
+        } else if v2.isNaN && !v1.isNaN {
             operandStack.pushF32(v2)
         } else {
             operandStack.pushF32(min(v1, v2))
@@ -474,11 +472,9 @@ extension VM {
     mutating func f32Max() {
         let v2 = operandStack.popF32()
         let v1 = operandStack.popF32()
-        let isV1NaN = v1 == .nan
-        let isV2NaN = v2 == .nan
-        if isV1NaN && !isV2NaN {
+        if v1.isNaN && !v2.isNaN {
             operandStack.pushF32(v1)
-        } else if isV2NaN && !isV1NaN {
+        } else if v2.isNaN && !v1.isNaN {
             operandStack.pushF32(v2)
         } else {
             operandStack.pushF32(max(v1, v2))
@@ -542,11 +538,9 @@ extension VM {
     mutating func f64Min() {
         let v2 = operandStack.popF64()
         let v1 = operandStack.popF64()
-        let isV1NaN = v1 == .nan
-        let isV2NaN = v2 == .nan
-        if isV1NaN && !isV2NaN {
+        if v1.isNaN && !v2.isNaN {
             operandStack.pushF64(v1)
-        } else if isV2NaN && !isV1NaN {
+        } else if v2.isNaN && !v1.isNaN {
             operandStack.pushF64(v2)
         } else {
             operandStack.pushF64(min(v1, v2))
@@ -555,11 +549,9 @@ extension VM {
     mutating func f64Max() {
         let v2 = operandStack.popF64()
         let v1 = operandStack.popF64()
-        let isV1NaN = v1 == .nan
-        let isV2NaN = v2 == .nan
-        if isV1NaN && !isV2NaN {
+        if v1.isNaN && !v2.isNaN {
             operandStack.pushF64(v1)
-        } else if isV2NaN && !isV1NaN {
+        } else if v2.isNaN && !v1.isNaN {
             operandStack.pushF64(v2)
         } else {
             operandStack.pushF64(max(v1, v2))

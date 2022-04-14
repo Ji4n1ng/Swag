@@ -26,7 +26,11 @@ public struct VM {
     
     // MARK: Hook
     /// for hooking
-    public var hookDict: [FuncIdx: String]?
+    public var hookDict: [FuncIdx: String]? = nil
+    /// to record the size passed to the current `malloc` function
+    public var currentMallocedSize: UInt64? = nil
+    /// to record the pointer passed to the current `free` function
+    public var currentFreedPointer: UInt64? = nil
     
     public init(module: Module) {
         self.module = module
@@ -188,7 +192,14 @@ extension VM {
         let results = operandStack.popU64s(controlFrame.blockType.resultTypes.count)
         operandStack.popU64s(operandStack.size() - controlFrame.bp)
         operandStack.pushU64s(results)
+        if controlFrame.opcode == .call && controlStack.controlDepth() > 0 {
+            let (lastCallFrame, _) = controlStack.topCallFrame()
+            if let lastCallFrame = lastCallFrame {
+                local0Index = UInt32(lastCallFrame.bp)
+            }
+        }
         // MARK: Hook
+        // get the return results of the hooked function
         if let hookDict = hookDict,
            let function = controlFrame.function {
             // vm is exiting function
@@ -198,14 +209,40 @@ extension VM {
                     let resultCount = function.type.resultTypes.count
                     let results = operandStack.getTopOperands(resultCount)
                     log("🪝 The result of the hooked \(funcName) is \(results)", .native, .ins)
+                    // hardcode
+                    if funcName == "malloc" {
+                        guard let size = currentMallocedSize else {
+                            fatalError("cannot get malloc size")
+                        }
+                        guard let pointer = results.first else {
+                            fatalError("cannot get freed pointer")
+                        }
+                        let mallocRange = (Int(pointer), Int(pointer + size))
+                        log("🪝 the malloced range is \(mallocRange)", .native, .ins)
+                        memory.mallocDict.append(mallocRange)
+                        currentMallocedSize = nil
+                        memory.isStopCheckingMemory = false
+                    } else if funcName == "free" {
+                        guard let pointer = currentFreedPointer else {
+                            fatalError("cannot get freed pointer")
+                        }
+                        var mallocIndex: Int? = nil
+                        for (i, mallocRange) in memory.mallocDict.enumerated() {
+                            if mallocRange.0 == pointer {
+                                mallocIndex = i
+                            }
+                        }
+                        if let index = mallocIndex {
+                            let mallocRange = memory.mallocDict[index]
+                            log("🪝 the freed range is \(mallocRange)", .native, .ins)
+                            memory.mallocDict.remove(at: index)
+                        } else {
+                            log("🪝 cannot find malloced range started at \(pointer)", .native, .warning)
+                        }
+                        currentFreedPointer = nil
+                        memory.isStopCheckingMemory = false
+                    }
                 }
-            }
-        }
-        
-        if controlFrame.opcode == .call && controlStack.controlDepth() > 0 {
-            let (lastCallFrame, _) = controlStack.topCallFrame()
-            if let lastCallFrame = lastCallFrame {
-                local0Index = UInt32(lastCallFrame.bp)
             }
         }
     }
@@ -219,6 +256,13 @@ extension VM {
     // MARK: - loop
     
     public mutating func loop() {
+        // MARK: Hook
+        if hookDict == nil {
+            // don't need to hook
+            // no need to check memory
+            memory.isStopCheckingMemory = true
+        }
+        
         let depth = controlStack.controlDepth()
         while controlStack.controlDepth() >= depth {
             guard var controlFrame = controlStack.topControlFrame else {

@@ -78,6 +78,7 @@ extension VM {
     mutating func call(funcIdx: FuncIdx) {
         let function = funcs[Int(funcIdx)]
         // MARK: Hook
+        // get the parameters of the hooked function
         if let hookDict = hookDict {
             for (hookFuncIdx, hookFuncName) in hookDict {
                 if funcIdx == hookFuncIdx {
@@ -85,6 +86,20 @@ extension VM {
                     let paramCount = function.type.paramTypes.count
                     let params = operandStack.getTopOperands(paramCount)
                     log("🪝 \(hookFuncName)'s parameter is \(params)", .native, .ins)
+                    // hardcode
+                    if hookFuncName == "malloc" {
+                        memory.isStopCheckingMemory = true
+                        guard let size = params.first else {
+                            fatalError("cannot get malloc size")
+                        }
+                        currentMallocedSize = size
+                    } else if hookFuncName == "free" {
+                        memory.isStopCheckingMemory = true
+                        guard let pointer = params.first else {
+                            fatalError("cannot get freed pointer")
+                        }
+                        currentFreedPointer = pointer
+                    }
                 }
             }
         }

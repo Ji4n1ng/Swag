@@ -124,12 +124,28 @@ final class SwagCoreTests: XCTestCase {
     
     func testMalloc1() throws {
         let casePath = fixtures.appendingPathComponent("Malloc")
+            .appendingPathComponent("example1.wasm")
+        var instance = try instantiate(casePath)
+        instance.loop()
+    }
+    
+    func testMalloc2() throws {
+        let casePath = fixtures.appendingPathComponent("Malloc")
             .appendingPathComponent("example2.wasm")
         var instance = try instantiate(casePath)
-        let hookDict: [FuncIdx: String] = [10: "malloc"]
+        instance.loop()
+    }
+    
+    func testMalloc3() throws {
+        let casePath = fixtures.appendingPathComponent("Malloc")
+            .appendingPathComponent("example3.wasm")
+        var instance = try instantiate(casePath)
+        let hookDict: [FuncIdx: String] = [
+            8: "malloc",
+            9: "free"
+        ]
         instance.hookDict = hookDict
         instance.loop()
-        
     }
 
     static var allTests = [
