@@ -11,11 +11,11 @@ extension VM {
     
     // MARK: - Parametric Instructions
     
-    mutating func drop() {
+    func drop() {
         _ = operandStack.popU64()
     }
     
-    mutating func select() {
+    func select() {
         let v3 = operandStack.popBool()
         let v2 = operandStack.popU64()
         let v1 = operandStack.popU64()

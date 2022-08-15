@@ -19,17 +19,17 @@ extension VM {
         // do nothing
     }
     
-    mutating func block(_ args: BlockArgs) {
+    func block(_ args: BlockArgs) {
         let ft = module.getFuncType(bt: args.blockType)
         enterBlock(opcode: .block, funcType: ft, instrs: args.instrutions)
     }
     
-    mutating func loop(_ args: BlockArgs) {
+    func loop(_ args: BlockArgs) {
         let ft = module.getFuncType(bt: args.blockType)
         enterBlock(opcode: .loop, funcType: ft, instrs: args.instrutions)
     }
     
-    mutating func `if`(_ args: IfArgs) {
+    func `if`(_ args: IfArgs) {
         let ft = module.getFuncType(bt: args.blockType)
         let bool = operandStack.popBool()
         if bool {
@@ -40,7 +40,7 @@ extension VM {
         }
     }
     
-    mutating func br(_ arg: LabelIdx) {
+    func br(_ arg: LabelIdx) {
         let labelIdx = Int(arg)
         for _ in 0..<labelIdx {
             controlStack.popControlFrame()
@@ -55,13 +55,13 @@ extension VM {
         }
     }
     
-    mutating func brIf(_ arg: LabelIdx) {
+    func brIf(_ arg: LabelIdx) {
         if operandStack.popBool() {
             br(arg)
         }
     }
     
-    mutating func brTable(_ arg: BrTableArgs) {
+    func brTable(_ arg: BrTableArgs) {
         let n = Int(operandStack.popU32())
         if n < arg.labels.count {
             br(arg.labels[n])
@@ -70,12 +70,12 @@ extension VM {
         }
     }
     
-    mutating func `return`() {
+    func `return`() {
         let (_, labelIdx) = controlStack.topCallFrame()
         br(LabelIdx(labelIdx))
     }
     
-    mutating func call(funcIdx: FuncIdx) {
+    func call(funcIdx: FuncIdx) {
         let function = funcs[Int(funcIdx)]
         // MARK: Hook
         // get the parameters of the hooked function
@@ -107,7 +107,7 @@ extension VM {
         callFunc(function)
     }
     
-    mutating func callFunc(_ f: Function) {
+    func callFunc(_ f: Function) {
         if f.code != nil {
             callInternalFunc(f)
         } else {
@@ -115,7 +115,7 @@ extension VM {
         }
     }
     
-    mutating func callExternalFunc(_ f: Function) {
+    func callExternalFunc(_ f: Function) {
         let args = popArgs(f.type)
         guard let nativeFunc = f.swiftFunc else { fatalError() }
         do {
@@ -126,7 +126,7 @@ extension VM {
         }
     }
     
-    mutating func popArgs(_ ft: FuncType) -> [WasmVal] {
+    func popArgs(_ ft: FuncType) -> [WasmVal] {
         var args = [WasmVal]()
         for paramType in ft.paramTypes {
             var val: Any
@@ -146,7 +146,7 @@ extension VM {
         return args
     }
     
-    mutating func pushResults(_ ft: FuncType, results: [WasmVal]) {
+    func pushResults(_ ft: FuncType, results: [WasmVal]) {
         if ft.resultTypes.count != results.count {
             fatalError()
         }
@@ -183,7 +183,7 @@ operand stack:
 |  ............ |
 */
     
-    mutating func callInternalFunc(_ f: Function) {
+    func callInternalFunc(_ f: Function) {
         guard let code = f.code else { fatalError() }
         enterBlock(opcode: .call, funcType: f.type, instrs: code.expr, function: f)
         
@@ -194,7 +194,7 @@ operand stack:
         }
     }
     
-    mutating func callIndirect(_ typeIdx: TypeIdx) {
+    func callIndirect(_ typeIdx: TypeIdx) {
         guard let table = self.table else { fatalError() }
         let ft = module.typeSec![Int(typeIdx)]
         
