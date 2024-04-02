@@ -24,6 +24,17 @@ public class VM {
     /// from the call frame of the current function.
     public var local0Index: UInt32
     
+    // MARK: Snapshot
+    /// The number of instructions executed
+    public var executedInsCount: Int
+    ///
+//    public var partitionThreshold:
+
+    
+    
+    
+    
+    
     // MARK: Hook
     /// for hooking
     public var hookDict: [FuncIdx: String]? = nil
@@ -38,17 +49,19 @@ public class VM {
         // init memory
         if let memSec = module.memSec,
            memSec.count > 0 {
-            memory = Memory(memoryType: memSec[0])
+            memory = Memory(type: memSec[0])
         } else {
             // TODO: ???
             let tag: LimitsTag = .minMax
             let type = MemType(tag: tag, min: 1000, max: UInt32(MAX_PAGE_COUNT))
-            memory = Memory(memoryType: type)
+            memory = Memory(type: type)
         }
         funcs = [Function]()
         controlStack = ControlStack(frames: [ControlFrame]())
         globals = [GlobalVar]()
         local0Index = 0
+        executedInsCount = 0
+        
         initMemory()
         initGlobals()
         initFuncs()

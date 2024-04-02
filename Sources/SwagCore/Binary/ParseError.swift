@@ -21,10 +21,13 @@ public enum ParseError: Error {
     case invalidExprEnd(_ opcode: Opcode)
     case invalidMutType(_ byte: Byte)
     case invalidBasicBlockType(_ raw: BlockType)
+    case invalidSectionID(_ byte: Byte)
+    case invalidSnapshotSectionID(_ byte: Byte)
     case unexpectedEnd
     case leb128IntTooLong
     case leb128IntTooLarge
     case leb128UnexpectedEnd
+    case missingSection(_ name: String)
     
     public var description: String {
         switch self {
@@ -62,6 +65,12 @@ public enum ParseError: Error {
             return "Invalid MutType: \(byte.hex)"
         case let .invalidBasicBlockType(raw):
             return "Invalid BasicBlockType: \(raw)"
+        case let .invalidSectionID(byte):
+            return "Invalid Section ID: \(byte.hex)"
+        case let .invalidSnapshotSectionID(byte):
+            return "Invalid Snapshot Section ID: \(byte.hex)"
+        case let .missingSection(name):
+            return "Missing Section: \(name)"
         }
     }
 }

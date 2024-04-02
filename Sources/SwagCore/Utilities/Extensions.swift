@@ -28,7 +28,7 @@ extension Array where Element == Byte {
 // MARK: - LEB128
 
 /// https://en.wikipedia.org/wiki/LEB128#Decode_unsigned_integer
-func decodeVarUInt(data: [Byte], size: Int) throws -> (UInt64, Int) {
+public func decodeVarUInt(data: [Byte], size: Int) throws -> (UInt64, Int) {
     var result = UInt64(0)
     for (i, b) in data.enumerated() {
         if i == size / 7 {
@@ -49,7 +49,7 @@ func decodeVarUInt(data: [Byte], size: Int) throws -> (UInt64, Int) {
 }
 
 /// https://en.wikipedia.org/wiki/LEB128#Decode_signed_integer
-func decodeVarInt(data: [Byte], size: Int) throws -> (Int64, Int) {
+public func decodeVarInt(data: [Byte], size: Int) throws -> (Int64, Int) {
     var result = Int64(0)
     for (i, b) in data.enumerated() {
         if i == size / 7 {
@@ -70,4 +70,43 @@ func decodeVarInt(data: [Byte], size: Int) throws -> (Int64, Int) {
         }
     }
     throw ParseError.leb128UnexpectedEnd
+}
+
+public func encodeVarUInt(_ value: UInt64) -> [Byte] {
+    var value = value
+    var bytes: [Byte] = []
+    repeat {
+        var byte = Byte(value & 0x7f) // Extract the 7 least significant bits
+        value >>= 7
+        if value != 0 { // If more bytes to encode, set continuation bit
+            byte |= 0x80
+        }
+        bytes.append(byte)
+    } while value != 0
+    return bytes
+}
+
+public func encodeVarUInt(_ value: UInt32) -> [Byte] {
+    return encodeVarUInt(UInt64(value))
+}
+
+public func encodeVarInt(_ value: Int64) -> [Byte] {
+    var value = value
+    var bytes: [Byte] = []
+    var more = true
+    while more {
+        var byte = Byte(value & 0x7f) // Extract the 7 least significant bits
+        value >>= 7
+        // Determine if more bytes are needed
+        more = !(((value == 0) && ((byte & 0x40) == 0)) || ((value == -1) && ((byte & 0x40) != 0)))
+        if more {
+            byte |= 0x80 // Set continuation bit if more bytes are to follow
+        }
+        bytes.append(byte)
+    }
+    return bytes
+}
+
+public func encodeVarInt(_ value: Int32) -> [Byte] {
+    return encodeVarInt(Int64(value))
 }

@@ -113,8 +113,9 @@ extension Reader {
         // Read Sections
         var prevSecID: SectionID = .custom
         while remaining() > 0 {
-            guard let secID = SectionID(rawValue: readByte()) else {
-                fatalError()
+            let id = readByte()
+            guard let secID = SectionID(rawValue: id) else {
+                throw ParseError.invalidSectionID(id)
             }
             if secID == .custom {
                 if module.customSecs != nil {
@@ -564,4 +565,48 @@ extension Reader {
         }
         return b
     }
+    
+    // MARK: Snapshot
+    public mutating func readSnapshot() throws -> Snapshot {
+        var memory: Memory? = nil
+        
+        while remaining() > 0 {
+            let id = readByte()
+            guard let secID = SnapshotSectionID(rawValue: id) else {
+                throw ParseError.invalidSnapshotSectionID(id)
+            }
+            let n = try readVarUInt32()
+            let remainingBeforeRead = remaining()
+            switch secID {
+            case .memory:
+                memory = try readSnapshotMemory()
+            case .controlStack:
+                continue
+            case .operandStack:
+                continue
+            case .globals:
+                continue
+            }
+            let remainingAfterRead = remaining()
+            if remainingAfterRead + Int(n) != remainingBeforeRead {
+                fatalError()
+            }       
+        }
+        
+        if remaining() > 0 {
+            print("junk after last section")
+        }
+
+        guard memory != nil else { throw ParseError.missingSection("memory") }
+        return Snapshot(memory: memory!)
+        
+    }
+    
+    mutating func readSnapshotMemory() throws -> Memory {
+        let memTypes = try readMemSec()
+        let memData = try readBytes()
+        var memory = Memory(type: memTypes[0], data: memData)
+        return memory
+    }
+    
 }

@@ -11,6 +11,7 @@ public struct Memory {
     var type: MemType
     var data: [Byte?]
     
+    // MARK: Hook
     /// mallocDict is used to record all allocated memory address ranges
     /// in linear memory.
     /// (start address, end address)
@@ -20,11 +21,19 @@ public struct Memory {
     /// to check memory.
     var isStopCheckingMemory = false
     
-    init(memoryType: MemType) {
-        self.type = memoryType
-        self.data = Array<Byte?>.init(repeating: nil, count: Int(memoryType.min) * PAGE_SIZE)
+    public init(type: MemType) {
+        self.type = type
+        self.data = Array<Byte?>.init(repeating: nil, count: Int(type.min) * PAGE_SIZE)
     }
     
+    public init(type: MemType, data: [Byte?]) {
+        self.type = type
+        self.data = Array<Byte?>.init(repeating: nil, count: Int(type.min) * PAGE_SIZE)
+        for (offset, element) in data.enumerated() {
+            self.data[offset] = element
+        }
+    }
+
     func size() -> UInt32 {
         return UInt32(self.data.count / PAGE_SIZE)
     }
@@ -88,4 +97,44 @@ public struct Memory {
         self.data.replaceSubrange(subrange, with: data)
     }
     
+}
+
+extension Memory: Equatable {
+    public static func == (lhs: Memory, rhs: Memory) -> Bool {
+        // check type
+        guard lhs.type == rhs.type else { return false }
+        // check nils in the tail
+        var i = 0
+        for byte in lhs.data.reversed() {
+            if byte == nil {
+                i += 1
+            } else {
+                break
+            }
+        }
+        var j = 0
+        for byte in rhs.data.reversed() {
+            if byte == nil {
+                j += 1
+            } else {
+                break
+            }
+        }
+        guard i == j else { return false }
+        // check data
+        var lhsData = lhs.data.dropLast(i)
+        var rhsData = rhs.data.dropLast(j)
+        var isDataEqual = true
+        for (lhsByte, rhsByte) in zip(lhsData, rhsData) {
+            if lhsByte == rhsByte {
+                continue
+            } else if (lhsByte == nil && rhsByte == 0) || (lhsByte == 0 && rhsByte == nil) {
+                continue
+            } else {
+                isDataEqual = false
+                break
+            }
+        }
+        return isDataEqual
+    }
 }

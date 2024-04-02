@@ -27,7 +27,7 @@ public enum ValType: Byte {
     case f32 = 0x7D
     case f64 = 0x7C
     
-    init(_ byte: Byte) throws {
+    public init(_ byte: Byte) throws {
         if let vt = ValType(rawValue: byte) {
             self = vt
         } else {
@@ -122,6 +122,12 @@ public struct Limits {
     public var tag: LimitsTag
     public var min: UInt32
     public var max: UInt32?
+    
+    public init(tag: LimitsTag, min: UInt32, max: UInt32? = nil) {
+        self.tag = tag
+        self.min = min
+        self.max = max
+    }
 }
 
 extension Limits: CustomStringConvertible {
@@ -139,11 +145,17 @@ extension Limits: CustomStringConvertible {
     }
 }
 
+extension Limits: Equatable {
+    public static func == (lhs: Limits, rhs: Limits) -> Bool {
+        return lhs.tag == rhs.tag && lhs.min == rhs.min && lhs.max == rhs.max
+    }
+}
+
 public enum LimitsTag: Byte {
     case min = 0
     case minMax = 1
     
-    init(_ byte: Byte) throws {
+    public init(_ byte: Byte) throws {
         if let lt = LimitsTag(rawValue: byte) {
             self = lt
         } else {
@@ -173,7 +185,7 @@ public struct TableType {
     /// given in numbers of entries.
     public var limits: Limits
     
-    init(elemType: Byte = FUNC_REF, limits: Limits) {
+    public init(elemType: Byte = FUNC_REF, limits: Limits) {
         self.elemType = elemType
         self.limits = limits
     }
@@ -199,7 +211,7 @@ public enum MutType: Byte {
     case const = 0
     case `var` = 1
     
-    init(_ byte: Byte) throws {
+    public init(_ byte: Byte) throws {
         if let mut = MutType(rawValue: byte) {
             self = mut
         } else {
