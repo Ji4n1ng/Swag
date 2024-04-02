@@ -211,6 +211,7 @@ extension VM {
                 local0Index = UInt32(lastCallFrame.bp)
             }
         }
+        
         // MARK: Hook
         // get the return results of the hooked function
         if let hookDict = hookDict,

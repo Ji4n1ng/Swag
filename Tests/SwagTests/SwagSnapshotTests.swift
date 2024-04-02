@@ -1,5 +1,5 @@
 //
-//  SwagParserTests.swift
+//  SwagSnapshotTests.swift
 //  SwagTests
 //
 //  Created by Jianing Wang on 4/1/24.
@@ -8,7 +8,7 @@
 import XCTest
 import SwagCore
 
-final class SwagParserTests: XCTestCase {
+final class SwagSnapshotTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -43,15 +43,21 @@ final class SwagParserTests: XCTestCase {
         }
     }
     
-    func testSnapshotMemory() throws {
-        let datas: [[Byte?]] = [
+    func testSnapshot() throws {
+        let memoryDatas: [[Byte?]] = [
             [0, 1, 2, nil, nil, nil, 3, 4, 5],
             [0, 1, 2, 3, 211, 123, 89, 49, 65, 91, 67],
             [0, 1, 2, 3, 211, 123, 89, 49, 65, 91, 67, nil, nil, nil],
         ]
-        for data in datas {
+        let opStackDatas: [[UInt64]] = [
+            [0, 1, 2, 3, 4, 5],
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12312, 41234, 565, 765, 9876594, 1345362, 137441529],
+        ]
+        for (i, data) in memoryDatas.enumerated() {
             let memory = Memory(type: MemType(tag: .minMax, min: 1, max: 2), data: data)
-            let snapshot = Snapshot(memory: memory)
+            let opStack = OperandStack(slots: opStackDatas[i])
+            let snapshot = Snapshot(memory: memory, operandStack: opStack)
             let snapshotData = snapshot.export()
             print(snapshotData)
             

@@ -63,4 +63,20 @@ extension Exporter {
         }
         return data
     }
+    
+    func exportOperandStack(_ operandStack: OperandStack) -> [Byte] {
+        var data = [Byte]()
+        
+        let slotsCount = encodeVarUInt(UInt64(operandStack.slots.count))
+        let slotsBytes = operandStack.slots.flatMap { encodeVarUInt($0) }
+        
+        let stackLength = encodeVarUInt(UInt32(slotsCount.count + slotsBytes.count))
+        
+        data.append(SnapshotSectionID.operandStack.rawValue)
+        data.append(contentsOf: stackLength)
+        data.append(contentsOf: slotsCount)
+        data.append(contentsOf: slotsBytes)
+        
+        return data
+    }
 }

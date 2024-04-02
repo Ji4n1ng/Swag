@@ -147,6 +147,13 @@ final class SwagCoreTests: XCTestCase {
         instance.hookDict = hookDict
         instance.loop()
     }
+    
+    func testControl() throws {
+        let casePath = fixtures.appendingPathComponent("Control_Ins")
+            .appendingPathComponent("br.wasm")
+        let instance = try instantiate(casePath)
+        instance.loop()
+    }
 
     static var allTests = [
         ("testInstructions", testInstructions),

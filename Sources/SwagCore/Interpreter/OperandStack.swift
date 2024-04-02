@@ -8,7 +8,11 @@
 import Foundation
 
 public struct OperandStack {
-    private var slots = [UInt64]()
+    public var slots: [UInt64]
+    
+    public init(slots: [UInt64] = []) {
+        self.slots = slots
+    }
 }
 
 extension OperandStack {

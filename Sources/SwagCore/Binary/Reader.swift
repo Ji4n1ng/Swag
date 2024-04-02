@@ -52,6 +52,12 @@ extension Reader {
         return UInt32(n)
     }
     
+    mutating func readVarUInt64() throws -> UInt64 {
+        let (n, w) = try decodeVarUInt(data: data, size: 64)
+        data = Array(data.suffix(from: w))
+        return UInt64(n)
+    }
+
     mutating func readVarInt32() throws -> Int32 {
         let (n, w) = try decodeVarInt(data: data, size: 32)
         data = Array(data.suffix(from: w))
@@ -569,6 +575,7 @@ extension Reader {
     // MARK: Snapshot
     public mutating func readSnapshot() throws -> Snapshot {
         var memory: Memory? = nil
+        var opStack: OperandStack? = nil
         
         while remaining() > 0 {
             let id = readByte()
@@ -583,7 +590,7 @@ extension Reader {
             case .controlStack:
                 continue
             case .operandStack:
-                continue
+                opStack = try readOperandStack()
             case .globals:
                 continue
             }
@@ -597,16 +604,26 @@ extension Reader {
             print("junk after last section")
         }
 
-        guard memory != nil else { throw ParseError.missingSection("memory") }
-        return Snapshot(memory: memory!)
+        guard memory != nil else { throw ParseError.missingSection("Memory") }
+        guard opStack != nil else { throw ParseError.missingSection("OperandStack") }
+        return Snapshot(memory: memory!, operandStack: opStack!)
         
     }
     
     mutating func readSnapshotMemory() throws -> Memory {
         let memTypes = try readMemSec()
         let memData = try readBytes()
-        var memory = Memory(type: memTypes[0], data: memData)
+        let memory = Memory(type: memTypes[0], data: memData)
         return memory
+    }
+    
+    mutating func readOperandStack() throws -> OperandStack {
+        let count = try readVarUInt32()
+        var slots = [UInt64]()
+        for _ in 0..<count {
+            slots.append(try readVarUInt64())
+        }
+        return OperandStack(slots: slots)
     }
     
 }

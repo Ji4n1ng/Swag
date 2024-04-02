@@ -17,18 +17,20 @@ public enum SnapshotSectionID: Byte {
 public class Snapshot {
     
     public let memory: Memory
-//    let operandStack: OperandStack
+    public let operandStack: OperandStack
 //    let controlStack: ControlStack
 //    let globals: [GlobalVar]
     
-    public init(memory: Memory) {
+    public init(memory: Memory, operandStack: OperandStack) {
         self.memory = memory
+        self.operandStack = operandStack
     }
     
     public func export() -> [Byte] {
-        let exporter = Exporter()
+        let exp = Exporter()
         var data = [Byte]()
-        data.append(contentsOf: exporter.exportMemory(memory))
+        data.append(contentsOf: exp.exportMemory(memory))
+        data.append(contentsOf: exp.exportOperandStack(operandStack))
         return data
     }
     
