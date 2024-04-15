@@ -36,7 +36,7 @@ extension VM {
             enterBlock(opcode: .if, funcType: ft, instrs: args.instrutions1)
         } else {
             let instrs = args.instrutions2 ?? [Instruction]()
-            enterBlock(opcode: .if, funcType: ft, instrs: instrs)
+            enterBlock(opcode: .if, funcType: ft, instrs: instrs, isElse: true)
         }
     }
     

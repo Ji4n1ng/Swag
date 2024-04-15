@@ -79,4 +79,33 @@ extension Exporter {
         
         return data
     }
+    
+    func exportControlStack(_ controlStack: ControlStack) -> [Byte] {
+        var data = [Byte]()
+        var currentFunction: Function?
+        
+        var stackData = [Byte]()
+        stackData.append(contentsOf: encodeVarUInt(UInt32(controlStack.frames.count)))
+        for cf in controlStack.frames {
+            var frameData = [Byte]()
+            frameData.append(cf.opcode.rawValue)
+            if cf.opcode == .call {
+                guard let f = cf.function else { fatalError() }
+                currentFunction = f
+            }
+            guard let f = currentFunction else { fatalError() }
+            frameData.append(contentsOf: encodeVarUInt(UInt32(f.index)))
+            frameData.append(contentsOf: encodeVarUInt(UInt32(cf.pc)))
+            frameData.append(contentsOf: encodeVarUInt(UInt32(cf.bp)))
+            cf.isElse ? frameData.append(1) : frameData.append(0)
+            stackData.append(contentsOf: frameData)
+        }
+        let stackLength = encodeVarUInt(UInt32(stackData.count))
+        
+        data.append(SnapshotSectionID.controlStack.rawValue)
+        data.append(contentsOf: stackLength)
+        data.append(contentsOf: stackData)
+        
+        return data
+    }
 }

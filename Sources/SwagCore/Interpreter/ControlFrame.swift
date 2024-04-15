@@ -17,6 +17,8 @@ public struct ControlFrame {
     var pc: Int
     /// function
     var function: Function?
+    /// is else block
+    var isElse: Bool = false
 }
 
 public struct ControlStack {

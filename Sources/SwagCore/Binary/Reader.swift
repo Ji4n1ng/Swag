@@ -573,9 +573,10 @@ extension Reader {
     }
     
     // MARK: Snapshot
-    public mutating func readSnapshot() throws -> Snapshot {
+    public mutating func readSnapshot(module: Module) throws -> Snapshot {
         var memory: Memory? = nil
         var opStack: OperandStack? = nil
+        var controlStack: ControlStack? = nil
         
         while remaining() > 0 {
             let id = readByte()
@@ -588,7 +589,7 @@ extension Reader {
             case .memory:
                 memory = try readSnapshotMemory()
             case .controlStack:
-                continue
+                controlStack = try readControlStack(module)
             case .operandStack:
                 opStack = try readOperandStack()
             case .globals:
@@ -606,8 +607,8 @@ extension Reader {
 
         guard memory != nil else { throw ParseError.missingSection("Memory") }
         guard opStack != nil else { throw ParseError.missingSection("OperandStack") }
-        return Snapshot(memory: memory!, operandStack: opStack!)
-        
+        guard controlStack != nil else { throw ParseError.missingSection("ControlStack") }
+        return Snapshot(memory: memory!, operandStack: opStack!, controlStack: controlStack!)
     }
     
     mutating func readSnapshotMemory() throws -> Memory {
@@ -626,4 +627,80 @@ extension Reader {
         return OperandStack(slots: slots)
     }
     
+    func findInstruction(_ index: inout Int, _ instrs: [Instruction], _ targetIndex: Int) -> Instruction? {
+        for instr in instrs {
+            if index == targetIndex {
+                return instr
+            }
+            index += 1
+            if let blockArgs = instr.args as? BlockArgs {
+                if let instr = findInstruction(&index, blockArgs.instrutions, targetIndex) {
+                    return instr
+                }
+            } else if let ifArgs = instr.args as? IfArgs {
+                if let instr = findInstruction(&index, ifArgs.instrutions1, targetIndex) {
+                    return instr
+                }
+                if let instr = findInstruction(&index, ifArgs.instrutions2 ?? [], targetIndex) {
+                    return instr
+                }
+            }
+        }
+        return nil
+    }
+    
+    mutating func readControlStack(_ module: Module) throws -> ControlStack {
+        guard let funcSec = module.funcSec else { fatalError("Function section is missing") }
+        let count = try readVarUInt32()
+        var frames = [ControlFrame]()
+        let blockOpcodes: [Opcode] = [.block, .loop, .if]
+        for i in 0..<Int(count) {
+            guard let opcode = Opcode(rawValue: readByte()) else { fatalError("Unknown opcode") }
+            let funcIndex = try readVarUInt32()
+            let pc = try Int(readVarUInt32())
+            let bp = try Int(readVarUInt32())
+            let isElse = readByte() == 1
+            if opcode == .call {
+                var rawFuncIndex = Int(funcIndex)
+                if let importCount = module.importSec?.count,
+                   importCount > 0 {
+                    rawFuncIndex -= importCount
+                }
+                let typeIndex = funcSec[rawFuncIndex]
+                guard let funcType = module.typeSec?[Int(typeIndex)] else { fatalError("cannot find func type with func index \(rawFuncIndex)") }
+                guard let code = module.codeSec?[rawFuncIndex] else { fatalError("cannot find code with func index \(rawFuncIndex)") }
+                let function = Function(funcIndex, type: funcType, code: code)
+                let frame = ControlFrame(opcode: opcode, blockType: funcType, instrs: code.expr, bp: bp, pc: pc, function: function)
+                frames.append(frame)
+            } else if blockOpcodes.contains(opcode) {
+                guard frames.count > i - 1 else { fatalError("No last frame") }
+                let lastFrame = frames[i - 1]
+                var ii = 0
+                guard let instr = findInstruction(&ii, lastFrame.instrs, lastFrame.pc) else { fatalError("Cannot find instruction") }
+                guard instr.opcode == opcode else { fatalError("Opcode mismatch") }
+                var frame: ControlFrame?
+                switch opcode {
+                case .block, .loop:
+                    guard let blockArgs = instr.args as? BlockArgs else { fatalError("BlockArgs expected") }
+                    let ft = module.getFuncType(bt: blockArgs.blockType)
+                    frame = ControlFrame(opcode: opcode, blockType: ft, instrs: blockArgs.instrutions, bp: bp, pc: pc, function: nil)
+                case .if:
+                    guard let ifArgs = instr.args as? IfArgs else { fatalError("IfArgs expected") }
+                    let ft = module.getFuncType(bt: ifArgs.blockType)
+                    let instrs = isElse ? ifArgs.instrutions2 ?? [] : ifArgs.instrutions1
+                    frame = ControlFrame(opcode: opcode, blockType: ft, instrs: instrs, bp: bp, pc: pc)
+                default:
+                    fatalError("Unknown opcode")
+                }
+                if let frame = frame {
+                    frames.append(frame)
+                } else {
+                    fatalError("Cannot create frame")
+                }
+            } else {
+                fatalError("Unknown opcode")
+            }
+        }
+        return ControlStack(frames: frames)
+    }
 }

@@ -18,12 +18,13 @@ public class Snapshot {
     
     public let memory: Memory
     public let operandStack: OperandStack
-//    let controlStack: ControlStack
+    public let controlStack: ControlStack
 //    let globals: [GlobalVar]
     
-    public init(memory: Memory, operandStack: OperandStack) {
+    public init(memory: Memory, operandStack: OperandStack, controlStack: ControlStack) {
         self.memory = memory
         self.operandStack = operandStack
+        self.controlStack = controlStack
     }
     
     public func export() -> [Byte] {
@@ -31,7 +32,19 @@ public class Snapshot {
         var data = [Byte]()
         data.append(contentsOf: exp.exportMemory(memory))
         data.append(contentsOf: exp.exportOperandStack(operandStack))
+        data.append(contentsOf: exp.exportControlStack(controlStack))
         return data
+    }
+    
+    public func export(_ url: URL) {
+        let data = export()
+        let d = Foundation.Data(data)
+        do {
+            try d.write(to: url)
+        } catch {
+            print("Failed to write data to \(url)")
+            print(error)
+        }
     }
     
 }

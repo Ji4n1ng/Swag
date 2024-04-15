@@ -154,6 +154,52 @@ final class SwagCoreTests: XCTestCase {
         let instance = try instantiate(casePath)
         instance.loop()
     }
+    
+    func testSnapshot() throws {
+        // Read WASM binary
+        let dir = fixtures.appendingPathComponent("02_Fibonacci")
+        let casePath = dir.appendingPathComponent("Fibonacci.wasm")
+        let binaryData = try XCTUnwrap(NSData(contentsOf: casePath))
+        var buffer = [Byte].init(repeating: 0, count: binaryData.length)
+        binaryData.getBytes(&buffer, length: binaryData.length)
+        var reader = Reader(data: buffer)
+        let wasmModule = try reader.readModule()
+        
+        // Full execution
+        let vm0 = VM(module: wasmModule)
+        vm0.loop()
+        print("vm0 has executed \(vm0.executedInsCount) instructions")
+
+        // Partition the execution
+        // vm1
+        let vm1 = VM(module: wasmModule)
+        vm1.partitionThreshold = 1234
+        vm1.loop()
+        print("vm1 has executed \(vm1.executedInsCount) instructions")
+        
+        // Export the state of vm1 to snapshot1
+        let snapshot1 = Snapshot(
+            memory: vm1.memory,
+            operandStack: vm1.operandStack,
+            controlStack: vm1.controlStack
+        )
+        let url1 = dir.appendingPathComponent("1.snapshot")
+        snapshot1.export(url1)
+        
+        // Load the data of snapshot1
+        let snapshotData1 = try XCTUnwrap(NSData(contentsOf: url1))
+        var buf1 = [Byte].init(repeating: 0, count: snapshotData1.length)
+        snapshotData1.getBytes(&buf1, length: snapshotData1.length)
+        var reader1 = Reader(data: buf1)
+        let snapshot2 = try reader1.readSnapshot(module: wasmModule)
+          
+        // Restore the state of vm2 from snapshot1
+        let vm2 = VM(module: wasmModule)
+        vm2.restore(from: snapshot2)
+        vm2.loop()
+        print("vm2 has executed \(vm2.executedInsCount) instructions")
+    }
+    
 
     static var allTests = [
         ("testInstructions", testInstructions),
@@ -161,6 +207,6 @@ final class SwagCoreTests: XCTestCase {
         ("testFibonacci", testFibonacci),
         ("testFactorial", testFactorial),
         ("testFactorial2", testFactorial2),
-        ("testMemory", testMemory)
+        ("testMemory", testMemory),
     ]
 }

@@ -27,13 +27,8 @@ public class VM {
     // MARK: Snapshot
     /// The number of instructions executed
     public var executedInsCount: Int
-    ///
-//    public var partitionThreshold:
+    public var partitionThreshold: Int? = nil
 
-    
-    
-    
-    
     
     // MARK: Hook
     /// for hooking
@@ -42,6 +37,10 @@ public class VM {
     public var currentMallocedSize: UInt64? = nil
     /// to record the pointer passed to the current `free` function
     public var currentFreedPointer: UInt64? = nil
+    
+    
+    // MARK: Debug
+    public var printInstr: Bool = false
     
     public init(module: Module) {
         self.module = module
@@ -79,6 +78,19 @@ public class VM {
                     call(funcIdx: exp.desc.idx)
                     break
                 }
+            }
+        }
+    }
+    
+    public func restore(from snapshot: Snapshot) {
+        self.memory = snapshot.memory
+        self.operandStack = snapshot.operandStack
+        self.controlStack = snapshot.controlStack
+        // restore local0Index
+        for frame in controlStack.frames.reversed() {
+            if frame.opcode == .call {
+                local0Index = UInt32(frame.bp)
+                break
             }
         }
     }
@@ -184,7 +196,7 @@ public class VM {
 extension VM {
     
     // MARK: - block stack
-    func enterBlock(opcode: Opcode, funcType: FuncType, instrs: [Instruction], function: Function? = nil) {
+    func enterBlock(opcode: Opcode, funcType: FuncType, instrs: [Instruction], function: Function? = nil, isElse: Bool = false) {
         var basePointer = operandStack.size() - funcType.paramTypes.count
         if basePointer < 0 {
             basePointer = 0
@@ -277,8 +289,7 @@ extension VM {
             memory.isStopCheckingMemory = true
         }
         
-        let depth = controlStack.controlDepth()
-        while controlStack.controlDepth() >= depth {
+        while controlStack.controlDepth() >= 1 {
             guard var controlFrame = controlStack.topControlFrame else {
                 fatalError()
             }
@@ -289,16 +300,27 @@ extension VM {
                 controlFrame.pc += 1
                 controlStack.topControlFrame = controlFrame
                 execInstr(instr)
+                
+                executedInsCount += 1
+                
+                // MARK: Partition
+                if let threshold = partitionThreshold {
+                    if executedInsCount >= threshold {
+                        break
+                    }
+                }
             }
         }
     }
     
     func execInstr(_ instr: Instruction) {
-        // print
-        if let args = instr.args {
-            print("\(instr.opcode) \(args)")
-        } else {
-            print("\(instr.opcode)")
+        // MARK: Debug
+        if printInstr {
+            if let args = instr.args {
+                print("\(instr.opcode) \(args)")
+            } else {
+                print("\(instr.opcode)")
+            }
         }
         
         switch instr.opcode {
