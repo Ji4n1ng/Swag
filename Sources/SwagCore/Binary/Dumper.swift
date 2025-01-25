@@ -211,7 +211,6 @@ public extension Dumper {
                 let bt = module.getFuncType(bt: args.blockType)
                 print("\(indentation)\(instr.opcode) \(bt)")
                 dumpExpr(indentation: indentation + "  ", expr: args.instrutions)
-                print("\(indentation)end")
             case .if:
                 guard let args = instr.args as? IfArgs else {
                     fatalError()
@@ -223,7 +222,6 @@ public extension Dumper {
                     print("\(indentation)else")
                     dumpExpr(indentation: indentation + "  ", expr: instrs2)
                 }
-                print("\(indentation)end")
             default:
                 if let args = instr.args {
                     print("\(indentation)\(instr.opcode) \(args)")

@@ -19,7 +19,8 @@ public struct Memory {
     /// When the vm is trying to malloc or free memory, stop checking
     /// momery read and write. Also, if we don't hook, we don't need
     /// to check memory.
-    var isStopCheckingMemory = false
+    var isStopCheckingMemory = true
+    
     
     public init(type: MemType) {
         self.type = type
@@ -77,7 +78,7 @@ public struct Memory {
     
     mutating func write(offset: UInt64, data: [Byte]) {
         // MARK: Instrumentation
-        if  !isStopCheckingMemory {
+        if !isStopCheckingMemory {
             var isInMallocedRange = false
             for mallocRange in mallocDict {
                 if mallocRange.0 <= offset && offset < mallocRange.1 {

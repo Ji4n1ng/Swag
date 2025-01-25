@@ -221,19 +221,19 @@ extension VM {
         operandStack.pushU32(UInt32(count))
     }
     func i32Add() {
-        let v2 = operandStack.popU32()
-        let v1 = operandStack.popU32()
-        operandStack.pushU32(v1 + v2)
+        let v2 = operandStack.popS32()
+        let v1 = operandStack.popS32()
+        operandStack.pushS32(v1 + v2)
     }
     func i32Sub() {
-        let v2 = operandStack.popU32()
-        let v1 = operandStack.popU32()
-        operandStack.pushU32(v1 - v2)
+        let v2 = operandStack.popS32()
+        let v1 = operandStack.popS32()
+        operandStack.pushS32(v1 - v2)
     }
     func i32Mul() {
-        let v2 = operandStack.popU32()
-        let v1 = operandStack.popU32()
-        operandStack.pushU32(v1 * v2)
+        let v2 = operandStack.popS32()
+        let v1 = operandStack.popS32()
+        operandStack.pushS32(v1 * v2)
     }
     func i32DivS() {
         let v2 = operandStack.popS32()
@@ -259,19 +259,19 @@ extension VM {
         operandStack.pushU32(v1 % v2)
     }
     func i32And() {
-        let v2 = operandStack.popU32()
-        let v1 = operandStack.popU32()
-        operandStack.pushU32(v1 & v2)
+        let v2 = operandStack.popS32()
+        let v1 = operandStack.popS32()
+        operandStack.pushS32(v1 & v2)
     }
     func i32Or() {
-        let v2 = operandStack.popU32()
-        let v1 = operandStack.popU32()
-        operandStack.pushU32(v1 | v2)
+        let v2 = operandStack.popS32()
+        let v1 = operandStack.popS32()
+        operandStack.pushS32(v1 | v2)
     }
     func i32Xor() {
-        let v2 = operandStack.popU32()
-        let v1 = operandStack.popU32()
-        operandStack.pushU32(v1 ^ v2)
+        let v2 = operandStack.popS32()
+        let v1 = operandStack.popS32()
+        operandStack.pushS32(v1 ^ v2)
     }
     func i32Shl() {
         let v2 = operandStack.popU32()
@@ -330,9 +330,9 @@ extension VM {
         operandStack.pushU64(v1 + v2)
     }
     func i64Sub() {
-        let v2 = operandStack.popU64()
-        let v1 = operandStack.popU64()
-        operandStack.pushU64(v1 - v2)
+        let v2 = operandStack.popS64()
+        let v1 = operandStack.popS64()
+        operandStack.pushS64(v1 - v2)
     }
     func i64Mul() {
         let v2 = operandStack.popU64()

@@ -16,14 +16,16 @@ final class SwagCoreTests: XCTestCase {
         .deletingLastPathComponent()
         .appendingPathComponent("Fixtures")
     
-    func instantiate(_ path: URL) throws -> VM {
+    func instantiate(_ path: URL, isDump: Bool = false) throws -> VM {
         let data = try XCTUnwrap(NSData(contentsOf: path))
         var buffer = [Byte].init(repeating: 0, count: data.length)
         data.getBytes(&buffer, length: data.length)
         var reader = Reader(data: buffer)
         let module = try reader.readModule()
-//        var dumper = Dumper(module: module)
-//        dumper.dump()
+        var dumper = Dumper(module: module)
+        if isDump {
+            dumper.dump()
+        }
         let vm = VM(module: module)
         return vm
     }
@@ -52,6 +54,33 @@ final class SwagCoreTests: XCTestCase {
             .appendingPathComponent("HelloWorld.wasm")
         let instance = try instantiate(casePath)
         instance.loop()
+        print(instance.executedInsCount)
+    }
+    
+    func testControl2() throws {
+        let casePath = fixtures.appendingPathComponent("Control_Ins")
+            .appendingPathComponent("if2.wasm")
+        let vm = try instantiate(casePath)
+        vm.printInstr = true
+        vm.partitionThreshold = 17
+        vm.loop()
+        print("Executed ins count: \(vm.executedInsCount)")
+        
+        let snapshot = Snapshot(memory: vm.memory, operandStack: vm.operandStack, controlStack: vm.controlStack)
+        let url = URL(fileURLWithPath: "/Users/jianing/Desktop/if2.snapshot")
+        snapshot.export(url)
+        
+        let snapshotData = try XCTUnwrap(NSData(contentsOf: url))
+        var buf = [Byte].init(repeating: 0, count: snapshotData.length)
+        snapshotData.getBytes(&buf, length: snapshotData.length)
+        var reader = Reader(data: buf)
+        let snapshot2 = try reader.readSnapshot(module: vm.module)
+          
+        // Restore the state of vm2 from snapshot1
+        let vm2 = VM(module: vm.module)
+        vm2.restore(from: snapshot2)
+        vm2.loop()
+        print("vm2 has executed \(vm2.executedInsCount) instructions")
     }
     
     func testFibonacci() throws {

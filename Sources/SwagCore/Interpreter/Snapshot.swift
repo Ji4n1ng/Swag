@@ -9,8 +9,8 @@ import Foundation
 
 public enum SnapshotSectionID: Byte {
     case memory = 0
-    case controlStack
     case operandStack
+    case controlStack
     case globals
 }
 

@@ -463,7 +463,7 @@ extension Reader {
         if end != .end {
             throw ParseError.invalidExprEnd(end)
         }
-        return instrs
+        return instrs + [Instruction(opcode: .end, args: nil)]
     }
     
     mutating func readInstructions() throws -> ([Instruction], Opcode) {
@@ -475,6 +475,9 @@ extension Reader {
                 return (instrs, end)
             }
             instrs.append(instr)
+            if instr.opcode == .block || instr.opcode == .loop || instr.opcode == .if {
+                instrs.append(Instruction(opcode: .end, args: nil))
+            }
         }
     }
     

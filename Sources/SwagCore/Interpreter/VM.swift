@@ -59,7 +59,7 @@ public class VM {
         controlStack = ControlStack(frames: [ControlFrame]())
         globals = [GlobalVar]()
         local0Index = 0
-        executedInsCount = 0
+        executedInsCount = 1
         
         initMemory()
         initGlobals()
@@ -283,11 +283,11 @@ extension VM {
     
     public func loop() {
         // MARK: Hook
-        if hookDict == nil {
-            // don't need to hook
-            // no need to check memory
-            memory.isStopCheckingMemory = true
-        }
+//        if hookDict == nil {
+//            // don't need to hook
+//            // no need to check memory
+//            memory.isStopCheckingMemory = true
+//        }
         
         while controlStack.controlDepth() >= 1 {
             guard var controlFrame = controlStack.topControlFrame else {
@@ -317,9 +317,9 @@ extension VM {
         // MARK: Debug
         if printInstr {
             if let args = instr.args {
-                print("\(instr.opcode) \(args)")
+                print("\(executedInsCount) \(instr.opcode) \(args)")
             } else {
-                print("\(instr.opcode)")
+                print("\(executedInsCount) \(instr.opcode)")
             }
         }
         
